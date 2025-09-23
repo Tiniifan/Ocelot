@@ -1,0 +1,193 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.EncounterPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="300">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource TabContainerStyle}">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="NPCTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="NPC" Style="{StaticResource TabTextStyle}" />
+                </Border>
+                <Border x:Name="TeamTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Team" Style="{StaticResource TabTextStyle}" />
+                </Border>
+                <Border x:Name="TextTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Text" Style="{StaticResource TabTextStyle}" />
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="NPCContent" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="0,10,0,0">
+                    <GroupBox Header="NPC Information" Style="{StaticResource ImaginationGroupBox}">
+                        <StackPanel>
+                            <TextBox x:Name="PlayerID1TextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="PlayerID1"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <Grid Margin="0,5,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" 
+                                         x:Name="LocationXTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}" 
+                                         Tag="Location X" 
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                                <TextBox Grid.Column="2" 
+                                         x:Name="LocationYTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}" 
+                                         Tag="Location Y" 
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </Grid>
+                            <Grid Margin="0,5,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" 
+                                         x:Name="LocationZTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}" 
+                                         Tag="Location Z" 
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                                <TextBox Grid.Column="2" 
+                                         x:Name="RotationTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}" 
+                                         Tag="Rotation" 
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </Grid>
+                            <CheckBox x:Name="ChasePlayerCheckBox" 
+                                      Content="Chase Player" 
+                                      Margin="0,10,0,5" 
+                                      Foreground="{DynamicResource Theme.Text.PrimaryBrush}"/>
+                            <TextBox x:Name="UniformNPCTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Uniform"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="BootsNPCTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Boots"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer x:Name="TeamContent" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="0,10,0,0">
+                    <GroupBox Header="Team Information" Style="{StaticResource ImaginationGroupBox}">
+                        <StackPanel>
+                            <TextBox x:Name="TeamIDTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="TeamID"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="PlayerID1TeamTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="PlayerID1"
+                                     Margin="0,5,0,5"
+                                     IsReadOnly="True"/>
+                            <TextBox x:Name="PlayerID2TextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="PlayerID2"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="PlayerID3TextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="PlayerID3"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="PlayerID4TextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="PlayerID4"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="PlayerID5TextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="PlayerID5"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="UniformTeamTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Uniform"
+                                     Margin="0,5,0,5"
+                                     IsReadOnly="True"/>
+                            <TextBox x:Name="BootsTeamTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Boots"
+                                     Margin="0,5,0,5"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer x:Name="TextContent" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="0,10,0,0">
+                    <GroupBox Header="Text IDs" Style="{StaticResource ImaginationGroupBox}">
+                        <StackPanel>
+                            <TextBox x:Name="TextIDAskTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Text ID Ask"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="TextIDWaitTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Text ID Wait"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="TextIDLostTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Text ID Lost"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                            <TextBox x:Name="TextIDWinTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}" 
+                                     Tag="Text ID Win"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="HexTextBox_PreviewTextInput"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Condition" Style="{StaticResource ImaginationGroupBox}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox x:Name="ConditionTextBox" 
+                                     IsReadOnly="True"
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Condition"
+                                     Margin="0,5,0,5"
+                                     Background="{DynamicResource Theme.Control.BackgroundBrush}" 
+                                     Grid.Row="0"/>
+                            <Button Content="Make My Condition" 
+                                    Style="{StaticResource ModernButtonStyle}"
+                                    Grid.Row="1"
+                                    Margin="0,10,0,0"
+                                    HorizontalAlignment="Stretch"
+                                    Width="Auto" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.TalkPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="300">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+
+            <GroupBox Header="Basic Information" Style="{StaticResource ImaginationGroupBox}">
+                <StackPanel>
+                    <CheckBox x:Name="AutoTurnCheckBox" 
+                              Content="Auto Turn" 
+                              Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                              Margin="0,5,0,10" 
+                              Checked="AutoTurnCheckBox_CheckChanged" 
+                              Unchecked="AutoTurnCheckBox_CheckChanged" />
+
+                    <StackPanel Margin="0,5,0,5">
+                        <TextBlock Text="Event Type" Margin="0,0,0,2" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                        <ComboBox x:Name="EventTypeComboBox" 
+                                  Style="{StaticResource ModernComboBoxStyle}" 
+                                  SelectionChanged="EventTypeComboBox_SelectionChanged" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="EventValueContainer">
+                        <!-- Dynamic Event Value Container -->
+                        <!-- Event value control will be dynamically added here -->
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Condition" Style="{StaticResource ImaginationGroupBox}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="ConditionTextBox" 
+                             IsReadOnly="True"
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Event Condition"
+                             Margin="0,5,0,5"
+                             Background="{DynamicResource Theme.Control.BackgroundBrush}" 
+                             Grid.Row="0"/>
+                    <Button x:Name="MakeConditionButton" 
+                            Content="Make My Condition" 
+                            Style="{StaticResource ModernButtonStyle}"
+                            Grid.Row="1"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Stretch"
+                            Width="Auto"
+                            Click="MakeConditionButton_Click" />
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

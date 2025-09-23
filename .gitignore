@@ -1,0 +1,12 @@
+
+.vs/
+Ocelot/bin/Debug/temp/
+Ocelot/bin/Release/temp
+Ocelot/bin/Debug/Ocelot.zip
+Ocelot/bin/Release/Ocelot.zip
+Ocelot/bin/Debug/Ocelot.rar
+Ocelot/bin/Release/Ocelot.rar
+Ocelot/obj/
+bin/**/*.zip
+bin/**/*.rar
+**/packages/

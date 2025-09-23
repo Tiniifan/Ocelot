@@ -1,0 +1,449 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.MapEnvironmentPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource TabContainerStyle}">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="PropertyTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Property" Style="{StaticResource TabTextStyle}" />
+                </Border>
+
+                <Border x:Name="CameraTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Camera" Style="{StaticResource TabTextStyle}" />
+                </Border>
+
+                <Border x:Name="LightTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Light" Style="{StaticResource TabTextStyle}" />
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer x:Name="PropertyContent" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <GroupBox Header="Basic Information" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <TextBox x:Name="MapenvNameTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Mapenv Name"
+                                 Margin="0,5,0,5" />
+
+                        <TextBox x:Name="MapIDTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Map ID"
+                                 Margin="0,5,0,5" />
+
+                        <CheckBox x:Name="DefaultCheckBox" 
+                                  Content="Enable Default" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="DefaultCheckBox_CheckedChanged"
+                                  Unchecked="DefaultCheckBox_CheckedChanged" />
+                        <TextBox x:Name="DefaultTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Default"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="ParentIDCheckBox" 
+                                  Content="Enable Parent ID" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="ParentIDCheckBox_CheckedChanged"
+                                  Unchecked="ParentIDCheckBox_CheckedChanged" />
+                        <TextBox x:Name="ParentIDTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Parent ID"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="GroupIDCheckBox" 
+                                  Content="Enable Group ID" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="GroupIDCheckBox_CheckedChanged"
+                                  Unchecked="GroupIDCheckBox_CheckedChanged" />
+                        <TextBox x:Name="GroupIDTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Group ID"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="NumericTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="BtlMapIDCheckBox" 
+                                  Content="Enable Battle Map ID" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="BtlMapIDCheckBox_CheckedChanged"
+                                  Unchecked="BtlMapIDCheckBox_CheckedChanged" />
+                        <TextBox x:Name="BtlMapIDTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Battle Map ID"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="MapEffectCheckBox" 
+                                  Content="Enable Map Effect" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="MapEffectCheckBox_CheckedChanged"
+                                  Unchecked="MapEffectCheckBox_CheckedChanged" />
+                        <TextBox x:Name="MapEffectTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Map Effect"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="MMScrollCheckBox" 
+                                  Content="Enable MM Scroll" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="MMScrollCheckBox_CheckedChanged"
+                                  Unchecked="MMScrollCheckBox_CheckedChanged" />
+                        <TextBox x:Name="MMScrollTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="MM Scroll"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="NumericTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="AntiModeCheckBox" 
+                                  Content="Enable Anti Mode" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="AntiModeCheckBox_CheckedChanged"
+                                  Unchecked="AntiModeCheckBox_CheckedChanged" />
+                        <TextBox x:Name="AntiModeTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Anti Mode"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="NumericTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="SndBGMCheckBox" 
+                                  Content="Enable Background Music" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="SndBGMCheckBox_CheckedChanged"
+                                  Unchecked="SndBGMCheckBox_CheckedChanged" />
+                        <TextBox x:Name="SndBGMTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Background Music"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="SndEnvCheckBox" 
+                                  Content="Enable Environment Sound" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="SndEnvCheckBox_CheckedChanged"
+                                  Unchecked="SndEnvCheckBox_CheckedChanged" />
+                        <TextBox x:Name="SndEnvTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Environment Sound"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+                    </StackPanel>
+                </GroupBox>
+
+                <CheckBox x:Name="MMModelPosCheckBox" 
+                          Content="Enable MM Model Position" 
+                          Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                          Margin="0,5,0,5"
+                          Checked="MMModelPosCheckBox_CheckedChanged"
+                          Unchecked="MMModelPosCheckBox_CheckedChanged" />
+
+                <GroupBox Header="MM Model Position" Style="{StaticResource ImaginationGroupBox}" x:Name="MMModelPosGroupBox" Visibility="Collapsed">
+                    <StackPanel>
+                        <Grid Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     x:Name="MinXTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Min X"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                            <TextBox Grid.Column="2"
+                                     x:Name="MinYTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Min Y"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                        </Grid>
+
+                        <Grid Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     x:Name="MaxXTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Max X"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                            <TextBox Grid.Column="2"
+                                     x:Name="MaxYTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Max Y"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer x:Name="CameraContent" Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+            <StackPanel Margin="10">
+                <GroupBox Header="Camera Settings" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <CheckBox x:Name="FovCheckBox" 
+                                  Content="Enable Fov" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="FovCheckBox_CheckedChanged"
+                                  Unchecked="FovCheckBox_CheckedChanged" />
+                        <TextBox x:Name="FovTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Fov"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="DistCheckBox" 
+                                  Content="Enable Dist" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="DistCheckBox_CheckedChanged"
+                                  Unchecked="DistCheckBox_CheckedChanged" />
+                        <TextBox x:Name="DistTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Dist"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="RotHCheckBox" 
+                                  Content="Enable RotH" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="RotHCheckBox_CheckedChanged"
+                                  Unchecked="RotHCheckBox_CheckedChanged" />
+                        <TextBox x:Name="RotHTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="RotH"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="RotVCheckBox" 
+                                  Content="Enable RotV" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="RotVCheckBox_CheckedChanged"
+                                  Unchecked="RotVCheckBox_CheckedChanged" />
+                        <TextBox x:Name="RotVTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="RotV"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="DptRngRateCheckBox" 
+                                  Content="Enable DptRngRate" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="DptRngRateCheckBox_CheckedChanged"
+                                  Unchecked="DptRngRateCheckBox_CheckedChanged" />
+                        <TextBox x:Name="DptRngRateTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="DptRngRate"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="DptLvlCheckBox" 
+                                  Content="Enable DptLvl" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="DptLvlCheckBox_CheckedChanged"
+                                  Unchecked="DptLvlCheckBox_CheckedChanged" />
+                        <TextBox x:Name="DptLvlTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="DptLvl"
+                                 Margin="0,0,0,5"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 Visibility="Collapsed" />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer x:Name="LightContent" Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+            <StackPanel Margin="10">
+                <GroupBox Header="Light Settings" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <CheckBox x:Name="MapLightCheckBox" 
+                                  Content="Enable Map Light" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="MapLightCheckBox_CheckedChanged"
+                                  Unchecked="MapLightCheckBox_CheckedChanged" />
+                        <TextBox x:Name="MapLightTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Map Light"
+                                 Margin="0,0,0,5"
+                                 Visibility="Collapsed" />
+
+                        <CheckBox x:Name="BackgroundColorCheckBox" 
+                                  Content="Enable Background Color" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="BackgroundColorCheckBox_CheckedChanged"
+                                  Unchecked="BackgroundColorCheckBox_CheckedChanged" />
+
+                        <GroupBox Header="Background Color" Style="{StaticResource ImaginationGroupBox}" x:Name="BackgroundColorGroupBox" Visibility="Collapsed">
+                            <Grid Margin="0,5,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         x:Name="BgColorRTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Red"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                <TextBox Grid.Column="2"
+                                         x:Name="BgColorGTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Green"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                <TextBox Grid.Column="4"
+                                         x:Name="BgColorBTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Blue"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </Grid>
+                        </GroupBox>
+
+                        <CheckBox x:Name="LightCollisionCheckBox" 
+                                  Content="Enable Light Collision" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="LightCollisionCheckBox_CheckedChanged"
+                                  Unchecked="LightCollisionCheckBox_CheckedChanged" />
+
+                        <GroupBox Header="Light Collision" Style="{StaticResource ImaginationGroupBox}" x:Name="LightCollisionGroupBox" Visibility="Collapsed">
+                            <Grid Margin="0,5,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         x:Name="LightCollisionXTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="X"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                <TextBox Grid.Column="2"
+                                         x:Name="LightCollisionYTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Y"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                <TextBox Grid.Column="4"
+                                         x:Name="LightCollisionZTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Z"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </Grid>
+                        </GroupBox>
+
+                        <CheckBox x:Name="ShadowColsCheckBox" 
+                                  Content="Enable Shadow Colors" 
+                                  Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                  Margin="0,5,0,5"
+                                  Checked="ShadowColsCheckBox_CheckedChanged"
+                                  Unchecked="ShadowColsCheckBox_CheckedChanged" />
+
+                        <GroupBox Header="Shadow Colors" Style="{StaticResource ImaginationGroupBox}" x:Name="ShadowColsGroupBox" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TreeView Grid.Column="0"
+                                          x:Name="ShadowColsTreeView" Height="120" Style="{StaticResource ModernTreeViewStyle}" 
+                                          SelectedItemChanged="ShadowColsTreeView_SelectedItemChanged" />
+
+                                <StackPanel Grid.Column="2"
+                                            x:Name="ShadowEditPanel" Visibility="Collapsed" Margin="0">
+                                    <TextBox x:Name="ShadowIDTextBox" 
+                                             Style="{StaticResource ImaginationLabeledTextBox}"
+                                             Tag="Shadow ID"
+                                             Margin="0,0,0,5" />
+
+                                    <TextBlock Text="XYZ Values" Margin="0,5,0,2" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                                    <Grid Margin="0,5,0,5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="5"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="5"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox Grid.Column="0"
+                                                 x:Name="ShadowXTextBox" 
+                                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                                 Tag="X"
+                                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                        <TextBox Grid.Column="2"
+                                                 x:Name="ShadowYTextBox" 
+                                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                                 Tag="Y"
+                                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                        <TextBox Grid.Column="4"
+                                                 x:Name="ShadowZTextBox" 
+                                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                                 Tag="Z"
+                                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

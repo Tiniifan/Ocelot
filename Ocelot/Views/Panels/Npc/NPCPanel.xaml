@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.NPCPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="300">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <GroupBox Header="Basic Information" Style="{StaticResource ImaginationGroupBox}">
+                <StackPanel>
+                    <TextBox x:Name="IDTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="ID (Hex)"
+                             Margin="0,5,0,5" 
+                             PreviewTextInput="HexTextBox_PreviewTextInput" />
+                    <TextBox x:Name="ModelHeadTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Model Head"
+                             Margin="0,5,0,5" 
+                             PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                    <StackPanel Margin="0,5,0,5">
+                        <TextBlock Text="Type" Margin="0,0,0,2" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                        <ComboBox x:Name="TypeComboBox" Style="{StaticResource ModernComboBoxStyle}" SelectionChanged="TypeComboBox_SelectionChanged" />
+                    </StackPanel>
+                    <TextBox x:Name="UniformNumberTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Uniform Number"
+                             Margin="0,5,0,5" 
+                             PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                    <TextBox x:Name="BootsNumberTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Boots Number"
+                             Margin="0,5,0,5" 
+                             PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                    <TextBox x:Name="GloveNumberTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Glove Number"
+                             Margin="0,5,0,5" 
+                             PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                    <StackPanel Margin="0,5,0,5">
+                        <TextBlock Text="Icon" Margin="0,0,0,2" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                        <ComboBox x:Name="IconComboBox" Style="{StaticResource ModernComboBoxStyle}" SelectionChanged="IconComboBox_SelectionChanged" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,233 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.EventTriggerPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource TabContainerStyle}">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="PropertiesTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Properties" Style="{StaticResource TabTextStyle}" />
+                </Border>
+
+                <Border x:Name="DefinitionTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                    <TextBlock Text="Definition" Style="{StaticResource TabTextStyle}" />
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer x:Name="PropertiesContent" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <GroupBox Header="Basic Information" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <TextBox x:Name="PtreeTypeTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Ptree Type"
+                                 IsReadOnly="True"
+                                 Margin="0,5,0,5" />
+
+                        <TextBox x:Name="EventNameTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Event Name"
+                                 Margin="0,5,0,5" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Position" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <Grid Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     x:Name="PositionXTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Position X"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                            <TextBox Grid.Column="2"
+                                     x:Name="PositionYTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Position Y"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                        </Grid>
+
+                        <Grid Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     x:Name="PositionZTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Position Z"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                            <StackPanel Grid.Column="2">
+                                <CheckBox x:Name="PositionWCheckBox" Content="Has W" Margin="0,0,0,5" 
+                                          Checked="PositionWCheckBox_Changed" Unchecked="PositionWCheckBox_Changed"/>
+                                <TextBox x:Name="PositionWTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Position W"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Area" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <TextBlock Text="Area Type" Margin="0,0,0,2" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                        <ComboBox x:Name="AreaTypeComboBox" Style="{StaticResource ModernComboBoxStyle}" SelectionChanged="AreaTypeComboBox_SelectionChanged">
+                            <ComboBoxItem Content="Box" />
+                            <ComboBoxItem Content="Circle" />
+                        </ComboBox>
+
+                        <StackPanel x:Name="BoxLimiterPanel" Margin="0,10,0,0" Visibility="Collapsed">
+                            <Grid Margin="0,5,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         x:Name="WidthTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Width"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                <TextBox Grid.Column="2"
+                                         x:Name="HeightTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Height"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </Grid>
+
+                            <TextBox x:Name="BoxAngleTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Angle"
+                                     Margin="0,5,0,5"
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                        </StackPanel>
+
+                        <StackPanel x:Name="CircleLimiterPanel" Margin="0,10,0,0" Visibility="Collapsed">
+                            <Grid Margin="0,5,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         x:Name="RadiusTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Radius"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+
+                                <TextBox Grid.Column="2"
+                                         x:Name="CircleAngleTextBox" 
+                                         Style="{StaticResource ImaginationLabeledTextBox}"
+                                         Tag="Angle"
+                                         PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer x:Name="DefinitionContent" Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+            <StackPanel Margin="10">
+                <GroupBox Header="Conditions" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <StackPanel x:Name="TBoxBitCheckPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="TBoxBitCheckCheckBox" Content="TBox Bit Check" Margin="0,0,0,5" 
+                                      Checked="TBoxBitCheckCheckBox_Changed" Unchecked="TBoxBitCheckCheckBox_Changed"/>
+                            <TextBox x:Name="TBoxBitCheckTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="TBox Bit Check Value"
+                                     PreviewTextInput="NumericTextBox_PreviewTextInput"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="BtnCheckPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="BtnCheckCheckBox" Content="Button Check" Margin="0,0,0,5" 
+                                      Checked="BtnCheckCheckBox_Changed" Unchecked="BtnCheckCheckBox_Changed"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Event Properties" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <TextBox x:Name="EventTypeTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Event Type"
+                                 Margin="0,5,0,5" />
+
+                        <StackPanel x:Name="EventIDPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="EventIDCheckBox" Content="Event ID" Margin="0,0,0,5" 
+                                      Checked="EventIDCheckBox_Changed" Unchecked="EventIDCheckBox_Changed"/>
+                            <TextBox x:Name="EventIDTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Event ID Value"
+                                     PreviewTextInput="NumericTextBox_PreviewTextInput"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="StopPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="StopCheckBox" Content="Stop" Margin="0,0,0,5" 
+                                      Checked="StopCheckBox_Changed" Unchecked="StopCheckBox_Changed"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="ItemIDPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="ItemIDCheckBox" Content="Item ID" Margin="0,0,0,5" 
+                                      Checked="ItemIDCheckBox_Changed" Unchecked="ItemIDCheckBox_Changed"/>
+                            <TextBox x:Name="ItemIDTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Item ID Value"
+                                     PreviewTextInput="NumericTextBox_PreviewTextInput"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="GetBitPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="GetBitCheckBox" Content="Get Bit" Margin="0,0,0,5" 
+                                      Checked="GetBitCheckBox_Changed" Unchecked="GetBitCheckBox_Changed"/>
+                            <TextBox x:Name="GetBitTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="Get Bit Value"
+                                     PreviewTextInput="NumericTextBox_PreviewTextInput"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="EVTBitPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="EVTBitCheckBox" Content="EV_T_BIT" Margin="0,0,0,5" 
+                                      Checked="EVTBitCheckBox_Changed" Unchecked="EVTBitCheckBox_Changed"/>
+                            <TextBox x:Name="EVTBitTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="EV_T_BIT Value"
+                                     PreviewTextInput="NumericTextBox_PreviewTextInput"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="EVFBitPanel" Margin="0,5,0,5">
+                            <CheckBox x:Name="EVFBitCheckBox" Content="EV_F_BIT" Margin="0,0,0,5" 
+                                      Checked="EVFBitCheckBox_Changed" Unchecked="EVFBitCheckBox_Changed"/>
+                            <TextBox x:Name="EVFBitTextBox" 
+                                     Style="{StaticResource ImaginationLabeledTextBox}"
+                                     Tag="EV_F_BIT Value"
+                                     PreviewTextInput="NumericTextBox_PreviewTextInput"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

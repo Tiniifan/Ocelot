@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.HealPointPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <GroupBox Header="Heal Point Information" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <TextBox x:Name="HealpointNameTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Healpoint Name"
+                                 Margin="0,5,0,5" />
+
+                        <TextBox x:Name="MapIDTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Map ID"
+                                 Margin="0,5,0,5" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Heal Areas Summary" Style="{StaticResource ImaginationGroupBox}">
+                    <StackPanel>
+                        <TextBlock x:Name="HealAreasSummaryTextBlock" 
+                                   Margin="5"
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

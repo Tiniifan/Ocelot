@@ -1,0 +1,269 @@
+﻿<UserControl x:Class="Ocelot.Views.OcelotMainContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:panels="clr-namespace:Ocelot.Views.Panels"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="55*" />
+            <ColumnDefinition Width="25*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Style="{StaticResource PanelBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource SearchBarStyle}" Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="SearchTextBox" 
+                                Grid.Column="0"
+                                Style="{StaticResource SearchTextBoxStyle}"
+                                Text="Search..." />
+
+                        <Button Grid.Column="1" 
+                                Background="Transparent" 
+                                BorderThickness="0"
+                                Width="20" 
+                                Height="20"
+                                Margin="0,0,5,0">
+                            <TextBlock Text="🔍" FontSize="10" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <TreeView x:Name="MainTreeView" Style="{StaticResource ModernTreeViewStyle}" 
+                              SelectedItemChanged="TreeView_SelectedItemChanged">
+                    </TreeView>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" Style="{StaticResource PanelBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource TabContainerStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Border x:Name="MinimapTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" 
+                                          Text="Minimap View" 
+                                          Style="{StaticResource TabTextStyle}" />
+
+                                <Button Grid.Column="1" 
+                                       Style="{StaticResource TabCloseButtonStyle}"
+                                       Margin="0,0,5,0">
+                                    <TextBlock Text="×" />
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <Border x:Name="View3DTab" Style="{StaticResource TabItemStyle}" MouseLeftButtonDown="TabClick">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" 
+                                          Text="3D View" 
+                                          Style="{StaticResource TabTextStyle}" />
+
+                                <Button Grid.Column="1" 
+                                       Style="{StaticResource TabCloseButtonStyle}"
+                                       Margin="0,0,5,0">
+                                    <TextBlock Text="×" />
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <Grid Grid.Row="1" x:Name="TabContentGrid">
+                    <Grid x:Name="MinimapContent" Visibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Style="{StaticResource ToolbarBorderStyle}">
+                            <StackPanel Orientation="Horizontal" Margin="10,5">
+                                <TextBlock Text="Minimap Options:" 
+                                          VerticalAlignment="Center" 
+                                          Margin="0,0,10,0"
+                                          Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+
+                                <Button Content="Zoom +" Style="{StaticResource ModernButtonStyle}" Click="ZoomInButton_Click" />
+                                <Button Content="Zoom -" Style="{StaticResource ModernButtonStyle}" Click="ZoomOutButton_Click" />
+
+                                <Button x:Name="ClearOverlaysButton" 
+                                       Content="Clear Events" 
+                                       Style="{StaticResource ModernButtonStyle}" 
+                                       Margin="10,0,0,0"
+                                       Click="ClearOverlaysButton_Click" />
+
+                                <Button x:Name="ToggleNPCModeButton" 
+                                       Content="Toggle NPC Mode" 
+                                       Style="{StaticResource ModernButtonStyle}" 
+                                       Margin="10,0,0,0"
+                                       Click="ToggleNPCModeButton_Click" />
+
+                                <TextBlock Text="View:" VerticalAlignment="Center" Margin="20,0,10,0" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                                <CheckBox Content="Function points" IsChecked="True" Margin="5,0" Checked="FunctionPointsCheckBox_Checked" Unchecked="FunctionPointsCheckBox_Unchecked" />
+                                <CheckBox Content="Heal points" IsChecked="True" Margin="5,0" Checked="HealPointsCheckBox_Checked" Unchecked="HealPointsCheckBox_Unchecked" />
+                                <CheckBox Content="NPCs" IsChecked="True" Margin="5,0" Checked="NPCsCheckBox_Checked" Unchecked="NPCsCheckBox_Unchecked" />
+                                <CheckBox Content="Treasure Boxes" IsChecked="True" Margin="5,0" Checked="TreasureBoxesCheckBox_Checked" Unchecked="TreasureBoxesCheckBox_Unchecked" />
+                                <CheckBox Content="Encounters" IsChecked="True" Margin="5,0" Checked="EncountersCheckBox_Checked" Unchecked="EncountersCheckBox_Unchecked" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" 
+                               Background="{DynamicResource Theme.Control.BackgroundBrush}" 
+                               Margin="5" 
+                               CornerRadius="3">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <ScrollViewer x:Name="ImageScrollViewer"
+                                              Grid.Row="0"
+                                              HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Auto"
+                                              Background="Transparent">
+                                    <Grid x:Name="ImageContainer">
+                                        <Image x:Name="MinimapImage"
+                                               Stretch="None"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               MouseWheel="MinimapImage_MouseWheel"
+                                               MouseRightButtonDown="Image_MouseRightButtonDown"
+                                               MouseRightButtonUp="Image_MouseRightButtonUp"
+                                               MouseMove="Image_MouseMove"
+                                               Cursor="Hand">
+                                            <Image.LayoutTransform>
+                                                <ScaleTransform x:Name="ImageScale" ScaleX="1" ScaleY="1"/>
+                                            </Image.LayoutTransform>
+                                        </Image>
+
+                                        <Canvas x:Name="EventOverlayCanvas"
+                                                Background="Transparent"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                MouseWheel="EventOverlayCanvas_MouseWheel"
+                                                MouseRightButtonDown="EventOverlayCanvas_MouseRightButtonDown"
+                                                MouseRightButtonUp="EventOverlayCanvas_MouseRightButtonUp"
+                                                MouseMove="EventOverlayCanvas_MouseMove">
+                                            <Canvas.LayoutTransform>
+                                                <ScaleTransform x:Name="CanvasScale" ScaleX="1" ScaleY="1"/>
+                                            </Canvas.LayoutTransform>
+                                        </Canvas>
+                                    </Grid>
+                                </ScrollViewer>
+
+                                <TextBlock x:Name="BoundingBoxText"
+                                           Grid.Row="1"
+                                           Text="MMModelPos: Not loaded"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Bottom"
+                                           Margin="10,5"
+                                           Foreground="{DynamicResource Theme.Text.PrimaryBrush}"
+                                           FontSize="10"
+                                           Background="{DynamicResource Theme.Control.BackgroundBrush}"
+                                           Padding="5,2" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="View3DContent" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Style="{StaticResource ToolbarBorderStyle}">
+                            <StackPanel Orientation="Horizontal" Margin="10,5">
+                                <TextBlock Text="3D Options:" 
+                                          VerticalAlignment="Center" 
+                                          Margin="0,0,10,0"
+                                          Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+
+                                <Button Content="Rotation" Style="{StaticResource ModernButtonStyle}" />
+                                <Button Content="Pan" Style="{StaticResource ModernButtonStyle}" />
+                                <Button Content="Reset" Style="{StaticResource ModernButtonStyle}" />
+                                <ComboBox Style="{StaticResource ModernComboBoxStyle}" Width="120" Margin="10,0,0,0">
+                                    <ComboBoxItem Content="Perspective" />
+                                    <ComboBoxItem Content="Orthogonal" />
+                                    <ComboBoxItem Content="Isometric" />
+                                </ComboBox>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" 
+                               Background="{DynamicResource Theme.Control.BackgroundBrush}" 
+                               Margin="5" 
+                               CornerRadius="3">
+                            <Grid>
+                                <TextBlock Text="3D View Container" 
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          Foreground="{DynamicResource Theme.Text.SecondaryBrush}"
+                                          FontStyle="Italic" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="2" Style="{StaticResource PanelBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="RightPanelHeader" 
+                          Grid.Row="0" 
+                          Text="Right Panel" 
+                          Style="{StaticResource PanelHeaderStyle}" />
+
+                <ScrollViewer x:Name="RightPanelScrollViewer" 
+                             Grid.Row="1" 
+                             VerticalScrollBarVisibility="Auto" 
+                             HorizontalScrollBarVisibility="Auto">
+                    <ContentControl x:Name="RightPanelContent" 
+                                   Margin="0" 
+                                   Background="{DynamicResource Theme.Control.BackgroundBrush}" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <GridSplitter Grid.Column="0" Style="{StaticResource ImaginationGridSplitter}" />
+
+        <GridSplitter Grid.Column="1" Style="{StaticResource ImaginationGridSplitter}" />
+    </Grid>
+</UserControl>

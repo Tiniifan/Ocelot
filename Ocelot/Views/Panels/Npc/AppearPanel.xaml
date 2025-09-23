@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="Ocelot.Views.Panels.AppearPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <GroupBox Header="Position" Style="{StaticResource ImaginationGroupBox}">
+                <StackPanel>
+                    <Grid Margin="0,5,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 x:Name="LocationXTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Location X"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                        <TextBox Grid.Column="2"
+                                 x:Name="LocationYTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Location Y"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                    </Grid>
+                    <Grid Margin="0,5,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 x:Name="LocationZTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Location Z"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                        <TextBox Grid.Column="2"
+                                 x:Name="RotationTextBox" 
+                                 Style="{StaticResource ImaginationLabeledTextBox}"
+                                 Tag="Rotation"
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Animation" Style="{StaticResource ImaginationGroupBox}">
+                <StackPanel>
+                    <TextBox x:Name="StandAnimationTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Stand Animation"
+                             Margin="0,5,0,5" />
+                    <TextBox x:Name="TalkAnimationTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Talk Animation"
+                             Margin="0,5,0,5" />
+                    <TextBox x:Name="UnkAnimationTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Unknown Animation"
+                             Margin="0,5,0,5" />
+                    <CheckBox x:Name="LookAtPlayerCheckBox" 
+                              Content="Look At The Player" 
+                              Margin="0,10,0,5"
+                              Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Condition" Style="{StaticResource ImaginationGroupBox}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="PhaseAppearTextBox" 
+                             Style="{StaticResource ImaginationLabeledTextBox}"
+                             Tag="Phase Appear"
+                             Margin="0,5,0,5"
+                             IsReadOnly="True" 
+                             Grid.Row="0"/>
+                    <Button Content="Make My Condition" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Margin="0,10,0,0"
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            Width="Auto"/>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
