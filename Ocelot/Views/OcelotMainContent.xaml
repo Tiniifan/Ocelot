@@ -105,6 +105,7 @@
                     <Grid x:Name="MinimapContent" Visibility="Visible">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
@@ -129,17 +130,25 @@
                                        Style="{StaticResource ModernButtonStyle}" 
                                        Margin="10,0,0,0"
                                        Click="ToggleNPCModeButton_Click" />
-
-                                <TextBlock Text="View:" VerticalAlignment="Center" Margin="20,0,10,0" Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
-                                <CheckBox Content="Function points" IsChecked="True" Margin="5,0" Checked="FunctionPointsCheckBox_Checked" Unchecked="FunctionPointsCheckBox_Unchecked" />
-                                <CheckBox Content="Heal points" IsChecked="True" Margin="5,0" Checked="HealPointsCheckBox_Checked" Unchecked="HealPointsCheckBox_Unchecked" />
-                                <CheckBox Content="NPCs" IsChecked="True" Margin="5,0" Checked="NPCsCheckBox_Checked" Unchecked="NPCsCheckBox_Unchecked" />
-                                <CheckBox Content="Treasure Boxes" IsChecked="True" Margin="5,0" Checked="TreasureBoxesCheckBox_Checked" Unchecked="TreasureBoxesCheckBox_Unchecked" />
-                                <CheckBox Content="Encounters" IsChecked="True" Margin="5,0" Checked="EncountersCheckBox_Checked" Unchecked="EncountersCheckBox_Unchecked" />
                             </StackPanel>
                         </Border>
 
-                        <Border Grid.Row="1" 
+                        <Border Grid.Row="1" Style="{StaticResource ToolbarBorderStyle}">
+                            <StackPanel Orientation="Horizontal" Margin="10,5">
+                                <TextBlock Text="View Options:" 
+                                          VerticalAlignment="Center" 
+                                          Margin="0,0,10,0"
+                                          Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
+
+                                <CheckBox Style="{StaticResource ImaginationCheckbox}" Content="Function points" IsChecked="True" Margin="5,0" Checked="FunctionPointsCheckBox_Checked" Unchecked="FunctionPointsCheckBox_Unchecked" />
+                                <CheckBox Style="{StaticResource ImaginationCheckbox}" Content="Heal points" IsChecked="True" Margin="5,0" Checked="HealPointsCheckBox_Checked" Unchecked="HealPointsCheckBox_Unchecked" />
+                                <CheckBox Style="{StaticResource ImaginationCheckbox}" Content="NPCs" IsChecked="True" Margin="5,0" Checked="NPCsCheckBox_Checked" Unchecked="NPCsCheckBox_Unchecked" />
+                                <CheckBox Style="{StaticResource ImaginationCheckbox}" Content="Treasure Boxes" IsChecked="True" Margin="5,0" Checked="TreasureBoxesCheckBox_Checked" Unchecked="TreasureBoxesCheckBox_Unchecked" />
+                                <CheckBox Style="{StaticResource ImaginationCheckbox}" Content="Encounters" IsChecked="True" Margin="5,0" Checked="EncountersCheckBox_Checked" Unchecked="EncountersCheckBox_Unchecked" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="2" 
                                Background="{DynamicResource Theme.Control.BackgroundBrush}" 
                                Margin="5" 
                                CornerRadius="3">

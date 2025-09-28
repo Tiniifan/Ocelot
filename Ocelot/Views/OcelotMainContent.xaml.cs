@@ -62,6 +62,9 @@ namespace Ocelot.Views
 
         private Dictionary<int, int> _selectedNPCAppearIndices = new Dictionary<int, int>();
 
+        private NPCJsonData _npcJsonData;
+        private Dictionary<string, int> _npcNameCounts = new Dictionary<string, int>();
+
         public OcelotMainContent()
         {
             InitializeComponent();
@@ -97,6 +100,48 @@ namespace Ocelot.Views
         public void SetCurrentFolderName(string folderName)
         {
             _currentFolderName = folderName;
+        }
+
+        public void SetNPCJsonData(NPCJsonData npcJsonData)
+        {
+            _npcJsonData = npcJsonData;
+        }
+
+        private string GetNPCName(NPCBase npcBase)
+        {
+            string defaultID = npcBase.ID.ToString("X8");
+
+            if (_npcJsonData?.chara_type == null) return defaultID;
+
+            int npcType = npcBase.Type;
+            int modelHead = npcBase.ModelHead;
+
+            Dictionary<string, string> targetDict = null;
+
+            if (npcType == (int)NPCType.Player)
+                targetDict = _npcJsonData.chara_type.player;
+            else if (npcType == (int)NPCType.NPC)
+                targetDict = _npcJsonData.chara_type.npc;
+            else if (npcType == (int)NPCType.NPCOther)
+                targetDict = _npcJsonData.chara_type.other;
+
+            if (targetDict != null && targetDict.TryGetValue(modelHead.ToString(), out string name))
+            {
+                // Manage duplicates
+                string key = $"{name}_{npcType}";
+                if (_npcNameCounts.ContainsKey(key))
+                {
+                    _npcNameCounts[key]++;
+                    return $"{name} ({_npcNameCounts[key]})";
+                }
+                else
+                {
+                    _npcNameCounts[key] = 1;
+                    return name;
+                }
+            }
+
+            return defaultID;
         }
 
         #region Image Management
@@ -729,7 +774,7 @@ namespace Ocelot.Views
                 {
                     var npcItem = new TreeViewItem
                     {
-                        Header = npc.ID.ToString("X8"),
+                        Header = GetNPCName(npc),
                         Tag = new { Type = "NPC", Data = npc }
                     };
 

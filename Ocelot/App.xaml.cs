@@ -9,6 +9,8 @@ using StudioElevenLib.Level5.Binary.Collections;
 using StudioElevenLib.Level5.Image;
 using StudioElevenLib.Level5.Binary;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Ocelot
 {
@@ -33,6 +35,13 @@ namespace Ocelot
             };
             openButton.Click += OpenButton_Click;
 
+            var saveButton = new Button
+            {
+                Content = "Save",
+                Style = menuButtonStyle
+            };
+            saveButton.Click += SaveButton_Click;
+
             var viewModel = new MainViewModel
             {
                 IsLoading = false,
@@ -44,7 +53,7 @@ namespace Ocelot
                     Children =
                     {
                         openButton,
-                        new Button { Content = "Save", Style = menuButtonStyle }
+                        saveButton
                     }
                 }
             };
@@ -62,6 +71,8 @@ namespace Ocelot
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             mainWindow.Show();
+
+            LoadNPCJsonData();
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
@@ -118,6 +129,18 @@ namespace Ocelot
             }
         }
 
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Save mapenv.bin
+            string mapenvFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}_mapenv.bin");
+            if (File.Exists(mapenvFilePath))
+            {
+                SaveMapenvFile(mapenvFilePath);
+            }
+
+            MessageBox.Show("Saved!");
+        }
+
         private void LoadImageFile(string xiFilePath)
         {
             try
@@ -169,6 +192,19 @@ namespace Ocelot
             {
                 MessageBox.Show($"Error loading mapenv file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void SaveMapenvFile(string mapenvFilePath)
+        {
+            CfgBin<PtreeNode> ptreeMapenv = new CfgBin<PtreeNode>();
+            ptreeMapenv.Encoding = Encoding.GetEncoding("SHIFT-JIS");
+
+            var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
+            var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
+
+            ptreeMapenv.Entries.AddChild(ocelotMainContent.MapEnvironment.ToPtreeNode());
+
+            ptreeMapenv.Save(mapenvFilePath);
         }
 
         private void LoadFuncptFile(string funcptFilePath)
@@ -355,6 +391,26 @@ namespace Ocelot
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading StudioElevenGUI resources: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadNPCJsonData()
+        {
+            var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
+            var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
+
+            try
+            {
+                string npcJsonPath = "./Resources/npc.json";
+                if (File.Exists(npcJsonPath))
+                {
+                    string jsonContent = File.ReadAllText(npcJsonPath);
+                    ocelotMainContent.SetNPCJsonData(JsonConvert.DeserializeObject<NPCJsonData>(jsonContent));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading NPC JSON data: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }
