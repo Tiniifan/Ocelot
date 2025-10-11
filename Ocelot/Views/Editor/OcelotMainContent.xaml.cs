@@ -16,6 +16,7 @@ using StudioElevenGUI.ViewModels;
 using Ocelot.ViewModels;
 using Point = System.Windows.Point;
 using Brush = System.Windows.Media.Brush;
+using Ocelot.ViewModels.TreeView;
 
 namespace Ocelot.Views
 {
@@ -34,9 +35,19 @@ namespace Ocelot.Views
 
             SetActiveTab(MinimapTab);
 
+            Loaded += OnLoaded;
+
             if (ImageScrollViewer != null)
             {
                 ViewModel_RequestSetZoom(this, ViewModel.CurrentZoom);
+            }
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null)
+            {
+                ViewModel.RequestOverlayUpdate += ViewModel_RequestOverlayUpdate;
             }
         }
 
@@ -140,22 +151,6 @@ namespace Ocelot.Views
             }
 
             MinimapImage.Source = e.MinimapSource;
-            EventOverlayCanvas.Width = e.OverlayCanvasWidth;
-            EventOverlayCanvas.Height = e.OverlayCanvasHeight;
-
-            // Appliquer le zoom directement aux RenderTransform des éléments
-            // Note: En XAML, cela serait géré par des bindings directement sur CurrentZoom
-            if (MinimapImage.RenderTransform is ScaleTransform imageScaleTransform)
-            {
-                imageScaleTransform.ScaleX = e.CurrentZoom;
-                imageScaleTransform.ScaleY = e.CurrentZoom;
-            }
-            if (EventOverlayCanvas.RenderTransform is ScaleTransform canvasScaleTransform)
-            {
-                canvasScaleTransform.ScaleX = e.CurrentZoom;
-                canvasScaleTransform.ScaleY = e.CurrentZoom;
-            }
-
 
             foreach (var overlayShapeData in e.ShapesToDraw)
             {
@@ -278,9 +273,9 @@ namespace Ocelot.Views
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (DataContext is OcelotViewModel viewModel && e.NewValue is TreeViewItem item)
+            if (DataContext is OcelotViewModel viewModel)
             {
-                //viewModel.SelectedTreeViewItemModel = item.DataContext as TreeViewItemModel;
+                viewModel.SelectedTreeViewItem = e.NewValue as TreeViewItemViewModel;
             }
         }
 

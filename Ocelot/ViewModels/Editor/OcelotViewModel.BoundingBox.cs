@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StudioElevenGUI.ViewModels;
+﻿using StudioElevenGUI.ViewModels;
 
 namespace Ocelot.ViewModels
 {
     public partial class OcelotViewModel : BaseViewModel
     {
-        private string _boundingBoxText;
+        private string _boundingBoxText = "MMModelPos: Not loaded";
         /// <summary>
-        /// Todo
+        /// Gets or sets the text displaying the current model's bounding box coordinates.
         /// </summary>
         public string BoundingBoxText
         {

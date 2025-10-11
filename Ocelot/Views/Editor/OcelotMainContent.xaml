@@ -50,8 +50,15 @@
                 </Border>
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <TreeView x:Name="MainTreeView" Style="{StaticResource ModernTreeViewStyle}" 
+                    <TreeView x:Name="MainTreeView"
+                              Style="{StaticResource ModernTreeViewStyle}"
+                              ItemsSource="{Binding NPCTreeItems}"
                               SelectedItemChanged="TreeView_SelectedItemChanged">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Header}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
                     </TreeView>
                 </ScrollViewer>
             </Grid>
@@ -180,12 +187,16 @@
                                                MouseMove="Image_MouseMove"
                                                Cursor="Hand">
                                             <Image.LayoutTransform>
-                                                <ScaleTransform x:Name="ImageScale" ScaleX="1" ScaleY="1"/>
+                                                <ScaleTransform x:Name="ImageScale"
+                                                    ScaleX="{Binding CurrentZoom}"
+                                                    ScaleY="{Binding CurrentZoom}" />
                                             </Image.LayoutTransform>
                                         </Image>
 
                                         <Canvas x:Name="EventOverlayCanvas"
                                                 Background="Transparent"
+                                                Width="{Binding ActualWidth, ElementName=MinimapImage}"
+                                                Height="{Binding ActualHeight, ElementName=MinimapImage}"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 MouseWheel="EventOverlayCanvas_MouseWheel"
@@ -193,7 +204,9 @@
                                                 MouseRightButtonUp="EventOverlayCanvas_MouseRightButtonUp"
                                                 MouseMove="EventOverlayCanvas_MouseMove">
                                             <Canvas.LayoutTransform>
-                                                <ScaleTransform x:Name="CanvasScale" ScaleX="1" ScaleY="1"/>
+                                                <ScaleTransform x:Name="CanvasScale"
+                                                    ScaleX="{Binding CurrentZoom}"
+                                                    ScaleY="{Binding CurrentZoom}" />
                                             </Canvas.LayoutTransform>
                                         </Canvas>
                                     </Grid>
@@ -201,7 +214,7 @@
 
                                 <TextBlock x:Name="BoundingBoxText"
                                            Grid.Row="1"
-                                           Text="MMModelPos: Not loaded"
+                                           Text="{Binding BoundingBoxText}"
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Bottom"
                                            Margin="10,5"
@@ -261,16 +274,15 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="RightPanelHeader" 
-                          Grid.Row="0" 
-                          Text="Right Panel" 
+                <TextBlock Grid.Row="0" 
+                          Text="{Binding RightPanelHeaderText}"
                           Style="{StaticResource PanelHeaderStyle}" />
 
                 <ScrollViewer x:Name="RightPanelScrollViewer" 
                              Grid.Row="1" 
                              VerticalScrollBarVisibility="Auto" 
                              HorizontalScrollBarVisibility="Auto">
-                    <ContentControl x:Name="RightPanelContent" 
+                    <ContentControl Content="{Binding RightPanelContent}"  
                                    Margin="0" 
                                    Background="{DynamicResource Theme.Control.BackgroundBrush}" />
                 </ScrollViewer>
