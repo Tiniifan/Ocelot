@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:panels="clr-namespace:Ocelot.Views.Panels"
+             xmlns:viewmodels="clr-namespace:Ocelot.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
 
+    <UserControl.DataContext>
+        <viewmodels:OcelotViewModel/>
+    </UserControl.DataContext>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*" />
@@ -165,6 +170,7 @@
                                               Background="Transparent">
                                     <Grid x:Name="ImageContainer">
                                         <Image x:Name="MinimapImage"
+                                               Source="{Binding MinimapSource}"
                                                Stretch="None"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"

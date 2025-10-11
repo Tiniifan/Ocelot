@@ -96,20 +96,18 @@ namespace Ocelot.Views.Panels
 
             var eventType = (EventType)_talk.EventType;
 
-            // Configure TextBox based on EventType
-            if (eventType == EventType.CompetitiveRoute || eventType == EventType.Shop)
+            if (eventType == EventType.CompetitiveRoute)
             {
                 _eventValueTextBox.Text = _talk.EventValue.ToString();
-                _eventValueTextBox.PreviewTextInput += NumericTextBox_PreviewTextInput;
+
                 _eventValueTextBox.TextChanged += (s, e) =>
                 {
-                    if (int.TryParse(_eventValueTextBox.Text, out int result))
-                        _talk.EventValue = result;
+                    _talk.EventValue = _eventValueTextBox.Text;
                 };
             }
             else if (eventType == EventType.Text)
             {
-                _eventValueTextBox.Text = _talk.EventValue.ToString("X");
+                _eventValueTextBox.Text = Convert.ToInt32(_talk.EventValue).ToString("X");
                 _eventValueTextBox.PreviewTextInput += HexTextBox_PreviewTextInput;
                 _eventValueTextBox.TextChanged += (s, e) =>
                 {

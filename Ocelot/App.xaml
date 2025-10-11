@@ -1,4 +1,13 @@
 ﻿<Application x:Class="Ocelot.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StudioElevenGUI;component/Styles/Colors/BlueAcrylicTheme.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StudioElevenGUI;component/Styles/StudioElevenTheme.xaml"/>
+                <ResourceDictionary Source="Views/ContextMenus/ContextMenus.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

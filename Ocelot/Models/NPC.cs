@@ -47,8 +47,8 @@ namespace Ocelot.Models
 
     public class NPCTalkConfig
     {
-        public int EventType { get; set; } // EventType
-        public int EventValue { get; set; }
+        public int EventType { get; set; }
+        public object EventValue { get; set; }
         public string EventCondition { get; set; }
         public int AutoTurn { get; set; } // 2 = true, other = false
     }

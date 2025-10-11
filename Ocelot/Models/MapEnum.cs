@@ -28,11 +28,11 @@
         Text = 1,
         UnkScript = 2,
         Script = 3,
-        Talk1 = 4,
-        Talk2 = 5,
+        CommunityMaster = 4,
+        Shop = 5,
         UnkEvent = 6,
         CompetitiveRoute = 7,
-        Shop = 8
+        Topic = 8
     }
 
     public enum TBoxType

@@ -23,8 +23,6 @@ namespace Ocelot
         {
             base.OnStartup(e);
 
-            LoadStudioElevenBaseResources();
-
             var menuButtonStyle = Application.Current.FindResource("MenuButtonStyle") as Style;
 
             var openButton = new Button
@@ -150,7 +148,7 @@ namespace Ocelot
 
                 var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
                 var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
-                ocelotMainContent?.LoadImage(bitmap);
+                ocelotMainContent.ViewModel?.LoadImage(bitmap);
             }
             catch (Exception ex)
             {
@@ -185,7 +183,7 @@ namespace Ocelot
                     // Trouve le MainContent et met à jour les données
                     var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
                     var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
-                    ocelotMainContent?.LoadMapenv(mapenv);
+                    ocelotMainContent.ViewModel?.LoadMapenv(mapenv);
                 }
             }
             catch (Exception ex)
@@ -202,7 +200,7 @@ namespace Ocelot
             var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
             var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
 
-            ptreeMapenv.Entries.AddChild(ocelotMainContent.MapEnvironment.ToPtreeNode());
+            ptreeMapenv.Entries.AddChild(ocelotMainContent.ViewModel.MapEnvironment.ToPtreeNode());
 
             ptreeMapenv.Save(mapenvFilePath);
         }
@@ -223,7 +221,7 @@ namespace Ocelot
                     // Trouve le MainContent et met à jour les données
                     var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
                     var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
-                    ocelotMainContent?.LoadFuncpoint(funcpoint);
+                    ocelotMainContent?.ViewModel.LoadFuncpoint(funcpoint);
                 }
             }
             catch (Exception ex)
@@ -248,7 +246,7 @@ namespace Ocelot
                     // Trouve le MainContent et met à jour les données
                     var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
                     var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
-                    ocelotMainContent?.LoadHealpoint(healpoint);
+                    ocelotMainContent.ViewModel?.LoadHealpoint(healpoint);
                 }
             }
             catch (Exception ex)
@@ -316,7 +314,7 @@ namespace Ocelot
                 // Pass data to main content
                 var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
                 var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
-                ocelotMainContent?.LoadNPCData(npcBases, npcAppearDict, npcTalkDict, _currentFolderName);
+                ocelotMainContent?.ViewModel.LoadNPCData(npcBases, npcAppearDict, npcTalkDict, _currentFolderName);
             }
             catch (Exception ex)
             {
@@ -355,10 +353,12 @@ namespace Ocelot
                 foreach (var talkInfo in npcTalkInfos)
                 {
                     var talks = new List<NPCTalkConfig>();
+
                     for (int i = talkInfo.TalkConfigStartIndex; i < talkInfo.TalkConfigStartIndex + talkInfo.TalkConfigCount && i < npcTalkConfigs.Count; i++)
                     {
                         talks.Add(npcTalkConfigs[i]);
                     }
+
                     npcTalkDict[talkInfo.NPCBaseID] = talks;
                 }
             }
@@ -368,30 +368,6 @@ namespace Ocelot
             }
 
             return npcTalkDict;
-        }
-
-        private void LoadStudioElevenBaseResources()
-        {
-            try
-            {
-                // First loads a default color theme (required for StudioElevenTheme.xaml)
-                var defaultColorDict = new ResourceDictionary
-                {
-                    Source = new Uri("/StudioElevenGUI;component/Styles/Colors/WhiteTheme.xaml", UriKind.Relative)
-                };
-                Application.Current.Resources.MergedDictionaries.Add(defaultColorDict);
-
-                // Then loads the main theme that references the colors
-                var themeDict = new ResourceDictionary
-                {
-                    Source = new Uri("/StudioElevenGUI;component/Styles/StudioElevenTheme.xaml", UriKind.Relative)
-                };
-                Application.Current.Resources.MergedDictionaries.Add(themeDict);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading StudioElevenGUI resources: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         private void LoadNPCJsonData()
@@ -405,7 +381,7 @@ namespace Ocelot
                 if (File.Exists(npcJsonPath))
                 {
                     string jsonContent = File.ReadAllText(npcJsonPath);
-                    ocelotMainContent.SetNPCJsonData(JsonConvert.DeserializeObject<NPCJsonData>(jsonContent));
+                    ocelotMainContent.ViewModel.SetNPCJsonData(JsonConvert.DeserializeObject<NPCJsonData>(jsonContent));
                 }
             }
             catch (Exception ex)

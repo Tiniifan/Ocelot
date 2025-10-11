@@ -66,7 +66,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\NPCJson.cs" />
-    <Compile Include="Views\OcelotMainContent.xaml.cs">
+    <Compile Include="Models\Overlay\OverlayShapeData.cs" />
+    <Compile Include="Models\Overlay\OverlayShapeType.cs" />
+    <Compile Include="Models\Overlay\OverlayUpdateEventArgs.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.BoundingBox.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.IdMaper.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.Loader.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.Minimap.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.Panel.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.Tab.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.TreeView.cs" />
+    <Compile Include="ViewModels\TreeView\TreeViewItemViewModel.cs" />
+    <Compile Include="Views\Editor\OcelotMainContent.xaml.cs">
       <DependentUpon>OcelotMainContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Panels\Encounter\EncounterPanel.xaml.cs">
@@ -118,7 +130,11 @@
     <Compile Include="Views\Panels\Treasurebox\TreasureBoxPanel.xaml.cs">
       <DependentUpon>TreasureBoxPanel.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\OcelotMainContent.xaml">
+    <Page Include="Views\ContextMenus\ContextMenus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Editor\OcelotMainContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

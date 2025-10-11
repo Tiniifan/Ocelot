@@ -90,11 +90,17 @@ namespace Ocelot.Views.Panels
             };
         }
 
+
         private void FloatTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var textBox = sender as TextBox;
+            var textBox = (TextBox)sender;
+
             var fullText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
-            e.Handled = !Regex.IsMatch(fullText, @"^-?[0-9]*(\.[0-9]*)?$");
+
+            e.Handled = !float.TryParse(fullText,
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.CurrentCulture,
+                out _);
         }
     }
 }

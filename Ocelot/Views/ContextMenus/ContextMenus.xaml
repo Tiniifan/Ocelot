@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <ContextMenu
+        x:Key="NpcContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add NPC"
+                  Command="{Binding PlacementTarget.Tag.AddNpcCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+    </ContextMenu>
+    
+</ResourceDictionary>
