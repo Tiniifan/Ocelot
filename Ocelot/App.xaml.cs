@@ -11,6 +11,9 @@ using StudioElevenLib.Level5.Binary;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Text;
+using StudioElevenLib.Level5.Binary.Logic;
+using StudioElevenLib.Collections;
+using StudioElevenLib.Level5.Binary.Mapper;
 
 namespace Ocelot
 {
@@ -18,6 +21,7 @@ namespace Ocelot
     {
         private string _currentFolderName;
         private string _currentFolderPath;
+        private Button _saveButton;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -33,12 +37,13 @@ namespace Ocelot
             };
             openButton.Click += OpenButton_Click;
 
-            var saveButton = new Button
+            _saveButton = new Button
             {
                 Content = "Save",
-                Style = menuButtonStyle
+                Style = menuButtonStyle,
+                IsEnabled = false
             };
-            saveButton.Click += SaveButton_Click;
+            _saveButton.Click += SaveButton_Click;
 
             var viewModel = new MainViewModel
             {
@@ -51,7 +56,7 @@ namespace Ocelot
                     Children =
                     {
                         openButton,
-                        saveButton
+                        _saveButton
                     }
                 }
             };
@@ -118,6 +123,8 @@ namespace Ocelot
                     {
                         LoadNpcFile(npcFilePath);
                     }
+
+                    _saveButton.IsEnabled = true;
                 }
             }
             catch (Exception ex)
@@ -130,10 +137,15 @@ namespace Ocelot
         {
             // Save mapenv.bin
             string mapenvFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}_mapenv.bin");
-            if (File.Exists(mapenvFilePath))
-            {
-                SaveMapenvFile(mapenvFilePath);
-            }
+            SaveMapenvFile(mapenvFilePath);
+
+            // Save npc.bin
+            string npcFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}.npc.bin");
+            SaveNpcFile(npcFilePath);
+
+            // Save talk.bin
+            string talkFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}.talk.bin");
+            SaveTalkFile(talkFilePath);
 
             MessageBox.Show("Saved!");
         }
@@ -321,6 +333,74 @@ namespace Ocelot
             }
         }
 
+        private void SaveNpcFile(string npcFilePath)
+        {
+            try
+            {
+                CfgBin<CfgTreeNode> npcBin = new CfgBin<CfgTreeNode>();
+                npcBin.Encoding = Encoding.GetEncoding("SHIFT-JIS");
+
+                var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
+                var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
+
+                if (ocelotMainContent?.ViewModel?.NPCs == null)
+                {
+                    Console.WriteLine("No NPC data to save.");
+                    return;
+                }
+
+                var npcBases = ocelotMainContent.ViewModel.NPCs;
+                var npcAppearDict = ocelotMainContent.ViewModel.NPCAppearDict ?? new Dictionary<int, List<NPCAppear>>();
+
+                // Prepare the lists
+                var npcPresets = new List<NPCPreset>();
+                var npcAppears = new List<NPCAppear>();
+
+                int currentAppearIndex = 0;
+
+                // Build lists from NPCBase
+                foreach (var npcBase in npcBases)
+                {
+                    // Retrieve the appears for this NPC.
+                    List<NPCAppear> appears = null;
+                    if (npcAppearDict.ContainsKey(npcBase.ID))
+                    {
+                        appears = npcAppearDict[npcBase.ID];
+                    }
+
+                    int appearCount = appears?.Count ?? 0;
+
+                    // Create the preset
+                    var preset = new NPCPreset
+                    {
+                        NPCBaseID = npcBase.ID,
+                        NPCAppearStartIndex = currentAppearIndex,
+                        NPCAppearCount = appearCount
+                    };
+                    npcPresets.Add(preset);
+
+                    // Add the appears to the global list
+                    if (appears != null && appears.Count > 0)
+                    {
+                        npcAppears.AddRange(appears);
+                        currentAppearIndex += appears.Count;
+                    }
+                }
+
+                // Add nodes
+                npcBin.Entries.AddBoundedEntryFromClassList(npcBases, "NPC_BASE_BEGIN", "NPC_BASE");
+                npcBin.Entries.AddBoundedEntryFromClassList(npcPresets, "NPC_PRESET_BEGIN", "NPC_PRESET");
+                npcBin.Entries.AddBoundedEntryFromClassList(npcAppears, "NPC_APPEAR_BEGIN", "NPC_APPEAR");
+
+                // Save the file
+                npcBin.Save(npcFilePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving NPC file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private Dictionary<int, List<NPCTalkConfig>> LoadTalkFile(string talkFilePath)
         {
             var npcTalkDict = new Dictionary<int, List<NPCTalkConfig>>();
@@ -367,6 +447,68 @@ namespace Ocelot
             }
 
             return npcTalkDict;
+        }
+
+        private void SaveTalkFile(string talkFilePath)
+        {
+            try
+            {
+                var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
+                var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
+
+                if (ocelotMainContent?.ViewModel?.NPCs == null || ocelotMainContent?.ViewModel?.NPCTalkDict == null)
+                {
+                    Console.WriteLine("No NPC Talk data to save.");
+                    return;
+                }
+
+                var npcBases = ocelotMainContent.ViewModel.NPCs;
+                var npcTalkDict = ocelotMainContent.ViewModel.NPCTalkDict;
+
+                CfgBin<CfgTreeNode> talkBin = new CfgBin<CfgTreeNode>();
+                talkBin.Encoding = Encoding.GetEncoding("SHIFT-JIS");
+
+                var npcTalkInfos = new List<NPCTalkInfo>();
+                var npcTalkConfigs = new List<NPCTalkConfig>();
+
+                int currentTalkConfigIndex = 0;
+
+                // Build lists from NPCBase and TalkDict
+                foreach (var npcBase in npcBases)
+                {
+                    List<NPCTalkConfig> talkConfigs = null;
+
+                    if (npcTalkDict.ContainsKey(npcBase.ID))
+                        talkConfigs = npcTalkDict[npcBase.ID];
+
+                    int talkCount = talkConfigs?.Count ?? 0;
+
+                    var talkInfo = new NPCTalkInfo
+                    {
+                        NPCBaseID = npcBase.ID,
+                        TalkConfigStartIndex = currentTalkConfigIndex,
+                        TalkConfigCount = talkCount
+                    };
+                    npcTalkInfos.Add(talkInfo);
+
+                    if (talkConfigs != null && talkConfigs.Count > 0)
+                    {
+                        npcTalkConfigs.AddRange(talkConfigs);
+                        currentTalkConfigIndex += talkConfigs.Count;
+                    }
+                }
+
+                // Add nodes
+                talkBin.Entries.AddBoundedEntryFromClassList(npcTalkInfos, "TALK_INFO_BEGIN", "TALK_INFO");
+                talkBin.Entries.AddBoundedEntryFromClassList(npcTalkConfigs, "TALK_CONFIG_BEGIN", "TALK_CONFIG");
+
+                // Save to file
+                talkBin.Save(talkFilePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving Talk file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void LoadNPCJsonData()
