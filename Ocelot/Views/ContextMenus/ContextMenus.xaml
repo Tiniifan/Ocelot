@@ -113,6 +113,41 @@
         <MenuItem Header="Add Healpoint"
                   Command="{Binding AddHealPointCommand}"
                   CommandParameter="{Binding}"/>
-    </ContextMenu>    
-    
+    </ContextMenu>
+
+    <ContextMenu
+        x:Key="HealPointContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Healpoint"
+                  Command="{Binding AddHealPointCommand}"
+                  CommandParameter="{Binding}"/>
+    </ContextMenu>
+
+    <ContextMenu
+        x:Key="HealAreaItemContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Healpoint"
+                  Command="{Binding AddHealPointCommand}"
+                  CommandParameter="{Binding}"/>
+        <Separator/>
+        <MenuItem Command="{Binding DataContext.DuplicateHealPointCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Duplicate "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+        <MenuItem Command="{Binding DataContext.DeleteHealPointCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Delete "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+    </ContextMenu>
+
 </ResourceDictionary>

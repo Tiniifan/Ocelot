@@ -1,13 +1,19 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Ocelot.Models;
+using Ocelot.ViewModels;
 
 namespace Ocelot.Views.Panels
 {
     public partial class HealAreaPanel : UserControl
     {
         private HealArea _currentHealArea;
+
+        private OcelotViewModel _viewModel;
 
         public HealAreaPanel()
         {
@@ -22,7 +28,7 @@ namespace Ocelot.Views.Panels
             {
                 HealAreaNameTextBox.Text = healArea.HealAreaName ?? string.Empty;
 
-                // Position (n'affiche pas W car il n'est pas utilisé pour les heal areas)
+                // Position (does not display W because it is not used for heal areas)
                 if (healArea.Position != null)
                 {
                     PositionXTextBox.Text = healArea.Position.X.ToString("F6");
@@ -42,6 +48,11 @@ namespace Ocelot.Views.Panels
             }
         }
 
+        public void SetViewModel(OcelotViewModel viewModel)
+        {
+            _viewModel = viewModel;
+        }
+
         private void ClearAllFields()
         {
             HealAreaNameTextBox.Text = string.Empty;
@@ -52,17 +63,38 @@ namespace Ocelot.Views.Panels
 
         private void FloatTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Permet seulement les chiffres, le point décimal et le signe moins
-            Regex regex = new Regex(@"^[0-9.\-]+$");
-            e.Handled = !regex.IsMatch(e.Text);
+            string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            e.Handled = !Regex.IsMatch(e.Text, $@"^[0-9{Regex.Escape(decimalSeparator)}\-]+$");
         }
 
-        // Events pour la sauvegarde des modifications (optionnel, pour le futur)
         private void HealAreaNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_currentHealArea != null)
+            if (_currentHealArea == null || _viewModel == null)
+                return;
+
+            string newName = HealAreaNameTextBox.Text.Trim();
+
+            // Checks if the name already exists for another HealArea
+            bool nameExists = _viewModel.HealPoint?.HealAreas
+                .Any(h => h != _currentHealArea && h.HealAreaName == newName) ?? false;
+
+            if (nameExists)
             {
-                _currentHealArea.HealAreaName = HealAreaNameTextBox.Text;
+                MessageBox.Show(
+                    $"The name '{newName}' is already used by another Heal Area.",
+                    "Duplicate Name",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                // Display the old name
+                HealAreaNameTextBox.Text = _currentHealArea.HealAreaName;
+                HealAreaNameTextBox.CaretIndex = HealAreaNameTextBox.Text.Length;
+            }
+            else
+            {
+                // The name is unique, it can be applied.
+                _currentHealArea.HealAreaName = newName;
+                _viewModel.RefreshTreeViewNames();
             }
         }
 
@@ -71,6 +103,7 @@ namespace Ocelot.Views.Panels
             if (_currentHealArea?.Position != null && float.TryParse(PositionXTextBox.Text, out float value))
             {
                 _currentHealArea.Position.X = value;
+                _viewModel?.UpdateOverlays();
             }
         }
 
@@ -79,6 +112,7 @@ namespace Ocelot.Views.Panels
             if (_currentHealArea?.Position != null && float.TryParse(PositionYTextBox.Text, out float value))
             {
                 _currentHealArea.Position.Y = value;
+                _viewModel?.UpdateOverlays();
             }
         }
 
@@ -87,6 +121,7 @@ namespace Ocelot.Views.Panels
             if (_currentHealArea?.Position != null && float.TryParse(PositionZTextBox.Text, out float value))
             {
                 _currentHealArea.Position.Z = value;
+                _viewModel?.UpdateOverlays();
             }
         }
     }

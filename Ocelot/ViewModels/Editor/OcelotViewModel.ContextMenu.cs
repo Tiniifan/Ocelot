@@ -29,6 +29,8 @@ namespace Ocelot.ViewModels
         public ICommand DeleteAppearCommand { get; private set; }
 
         public ICommand AddHealPointCommand { get; private set; }
+        public ICommand DuplicateHealPointCommand { get; private set; }
+        public ICommand DeleteHealPointCommand { get; private set; }
 
         public void InitializeContextMenuCommand()
         {
@@ -45,6 +47,8 @@ namespace Ocelot.ViewModels
             DeleteAppearCommand = new RelayCommand(ExecuteDeleteAppear);
 
             AddHealPointCommand = new RelayCommand(ExecuteAddHealPoint);
+            DuplicateHealPointCommand = new RelayCommand(ExecuteDuplicateHealPoint);
+            DeleteHealPointCommand = new RelayCommand(ExecuteDeleteHealPoint);
         }
 
         private void ExecuteAddNpc(object parameter)
@@ -344,6 +348,75 @@ namespace Ocelot.ViewModels
             MessageBox.Show($"Healpoint {healAreaIdInput} added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
             PopulateTreeView();
+        }
+        private void ExecuteDuplicateHealPoint(object parameter)
+        {
+            if (!(parameter is TreeViewItemViewModel treeItem))
+                return;
+
+            var typeProperty = treeItem.Tag.GetType().GetProperty("Type");
+            if (typeProperty == null)
+                return;
+
+            string type = typeProperty.GetValue(treeItem.Tag)?.ToString();
+
+            if (type != "HealArea")
+                return;
+
+            dynamic healAreaTag = treeItem.Tag;
+
+            HealArea originalHealArea = healAreaTag.Data;
+
+            int counter = 1;
+            string newId;
+
+            do
+            {
+                newId = "heal" + (counter < 10 ? "0" : "") + counter;
+                counter++;
+            } while (HealPoint.HealAreas.Any(healPoint => healPoint.HealAreaName == newId));
+
+            var duplicatedHealArea = originalHealArea.Clone();
+
+            // Change the HealPoint ID to avoid duplicate
+            duplicatedHealArea.HealAreaName = newId;
+
+            HealPoint.HealAreas.Add(duplicatedHealArea);
+
+            MessageBox.Show($"Healpoint {newId} duplicated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            PopulateTreeView();
+        }
+
+        private void ExecuteDeleteHealPoint(object parameter)
+        {
+            if (!(parameter is TreeViewItemViewModel treeItem))
+                return;
+
+            var typeProperty = treeItem.Tag.GetType().GetProperty("Type");
+            if (typeProperty == null)
+                return;
+
+            string type = typeProperty.GetValue(treeItem.Tag)?.ToString();
+
+            if (type != "HealArea")
+                return;
+
+            dynamic healAreaTag = treeItem.Tag;
+
+            HealArea selectedHealArea = healAreaTag.Data;
+            string healAreaName = selectedHealArea.HealAreaName;
+
+            var result = MessageBox.Show($"Are you sure you want to delete {healAreaName}?", "Confirm Delete",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                HealPoint.HealAreas.Remove(selectedHealArea);
+
+                MessageBox.Show($"{healAreaName} deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                PopulateTreeView();
+            }
         }
     }
 }

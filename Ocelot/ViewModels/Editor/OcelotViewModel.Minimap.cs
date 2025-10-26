@@ -215,7 +215,7 @@ namespace Ocelot.ViewModels
             SetZoom(CurrentZoom);
         }
 
-        private void UpdateOverlays()
+        public void UpdateOverlays()
         {
             var shapesToDraw = new List<OverlayShapeData>();
 

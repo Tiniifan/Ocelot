@@ -211,6 +211,7 @@ namespace Ocelot.ViewModels
         {
             RightPanelHeaderText = $"Heal Area: {healArea.HealAreaName}";
             _healAreaPanel.LoadData(healArea);
+            _healAreaPanel.SetViewModel(this);
             RightPanelContent = _healAreaPanel;
         }
 

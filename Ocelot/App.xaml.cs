@@ -139,6 +139,10 @@ namespace Ocelot
             string mapenvFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}_mapenv.bin");
             SaveMapenvFile(mapenvFilePath);
 
+            // Save healpt.bin
+            string healptFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}_healpt.bin");
+            SaveHealptFile(healptFilePath);
+
             // Save npc.bin
             string npcFilePath = Path.Combine(_currentFolderPath, $"{_currentFolderName}.npc.bin");
             SaveNpcFile(npcFilePath);
@@ -264,6 +268,19 @@ namespace Ocelot
             {
                 MessageBox.Show($"Error loading healpt file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void SaveHealptFile(string healptFilePath)
+        {
+            CfgBin<PtreeNode> ptreeHealpt = new CfgBin<PtreeNode>();
+            ptreeHealpt.Encoding = Encoding.GetEncoding("SHIFT-JIS");
+
+            var mainViewModel = Current.MainWindow?.DataContext as MainViewModel;
+            var ocelotMainContent = mainViewModel?.MainContent as Views.OcelotMainContent;
+
+            ptreeHealpt.Entries.AddChild(ocelotMainContent.ViewModel.HealPoint.ToPtreeNode());
+
+            ptreeHealpt.Save(healptFilePath);
         }
 
         private void LoadNpcFile(string npcFilePath)

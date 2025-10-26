@@ -55,6 +55,16 @@ namespace Ocelot.Models
 
             return node;
         }
+
+        public HealArea Clone()
+        {
+            return new HealArea
+            {
+                PtreType = this.PtreType,
+                HealAreaName = this.HealAreaName,
+                Position = this.Position
+            };
+        }
     }
 
     public class Healpoint

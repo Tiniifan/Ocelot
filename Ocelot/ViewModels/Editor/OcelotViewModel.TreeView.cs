@@ -134,18 +134,26 @@ namespace Ocelot.ViewModels
 
             if (HealPoint != null)
             {
+                var healPointContextMenu = (ContextMenu)Application.Current.FindResource("HealPointContextMenu");
+                healPointContextMenu.DataContext = this;
+                
                 var healptItem = new TreeViewItemViewModel
                 {
                     Header = $"{HealPoint.MapID}_healpt",
-                    Tag = new { Type = "HealpointRoot", Data = HealPoint }
+                    Tag = new { Type = "HealpointRoot", Data = HealPoint },
+                    ContextMenu = healPointContextMenu
                 };
 
                 foreach (var healArea in HealPoint.HealAreas)
                 {
+                    var healAreaItemContextMenu = (ContextMenu)Application.Current.FindResource("HealAreaItemContextMenu");
+                    healAreaItemContextMenu.DataContext = this;
+
                     healptItem.Children.Add(new TreeViewItemViewModel
                     {
                         Header = healArea.HealAreaName,
-                        Tag = new { Type = "HealArea", Data = healArea }
+                        Tag = new { Type = "HealArea", Data = healArea },
+                        ContextMenu = healAreaItemContextMenu
                     });
                 }
 
@@ -262,6 +270,105 @@ namespace Ocelot.ViewModels
             }
 
             NPCTreeItems.Add(rootItem);
+        }
+
+        /// <summary>
+        /// Recursively updates all TreeViewItemViewModel headers in the TreeView
+        /// to reflect current data without recreating nodes. Preserves selection.
+        /// </summary>
+        public void RefreshTreeViewNames()
+        {
+            if (NPCTreeItems == null || NPCTreeItems.Count == 0)
+                return;
+
+            // Save the currently selected item
+            var selected = SelectedTreeViewItem;
+
+            foreach (var root in NPCTreeItems)
+            {
+                UpdateNodeNames(root);
+            }
+
+            // Restore selection
+            SelectedTreeViewItem = selected;
+        }
+
+        /// <summary>
+        /// Recursively updates a TreeViewItemViewModel header if its underlying data has changed.
+        /// Handles NPCs, HealAreas, Events, MapJumps, SoundEffects, TreasureBoxes, and Encounters.
+        /// </summary>
+        private void UpdateNodeNames(TreeViewItemViewModel node)
+        {
+            if (node.Tag != null)
+            {
+                var typeProperty = node.Tag.GetType().GetProperty("Type");
+                if (typeProperty != null)
+                {
+                    string type = typeProperty.GetValue(node.Tag)?.ToString();
+
+                    switch (type)
+                    {
+                        case "NPC":
+                            var npcTag = node.Tag as NPCTagData;
+                            if (npcTag != null)
+                            {
+                                string newName = GetNPCName(npcTag.Data);
+                                if (node.Header != newName)
+                                    node.Header = newName;
+                            }
+                            break;
+
+                        case "NPCAppear":
+                            dynamic appearTag = node.Tag;
+                            string appearName = $"Appear_{appearTag.Index}";
+                            if (node.Header != appearName)
+                                node.Header = appearName;
+                            break;
+
+                        case "TalksCategory":
+                            // Header remains static ("Talks")
+                            break;
+
+                        case "NPCTalk":
+                            dynamic talkTag = node.Tag;
+                            string talkName = $"Talk_{talkTag.Index}";
+                            if (node.Header != talkName)
+                                node.Header = talkName;
+                            break;
+
+                        case "HealArea":
+                            dynamic healAreaTag = node.Tag;
+                            if (node.Header != healAreaTag.Data.HealAreaName)
+                                node.Header = healAreaTag.Data.HealAreaName;
+                            break;
+
+                        case "Event":
+                        case "MapJump":
+                        case "SoundEffect":
+                            dynamic eventTag = node.Tag;
+                            if (node.Header != eventTag.Data.EventName)
+                                node.Header = eventTag.Data.EventName;
+                            break;
+
+                        case "Mapenv":
+                        case "FuncpointRoot":
+                        case "HealpointRoot":
+                        case "TreasureBoxes":
+                        case "Encounters":
+                            // Header might be static, skip unless needed
+                            break;
+                    }
+                }
+            }
+
+            // Recursively update children
+            if (node.Children != null)
+            {
+                foreach (var child in node.Children)
+                {
+                    UpdateNodeNames(child);
+                }
+            }
         }
 
         /// <summary>

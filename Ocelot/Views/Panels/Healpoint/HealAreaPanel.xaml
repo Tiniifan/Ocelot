@@ -13,7 +13,8 @@
                         <TextBox x:Name="HealAreaNameTextBox" 
                                  Style="{StaticResource ImaginationLabeledTextBox}"
                                  Tag="Heal Area Name"
-                                 Margin="0,5,0,5" />
+                                 Margin="0,5,0,5"
+                                 TextChanged="HealAreaNameTextBox_TextChanged"/>
                     </StackPanel>
                 </GroupBox>
 
@@ -30,20 +31,23 @@
                                      x:Name="PositionXTextBox" 
                                      Style="{StaticResource ImaginationLabeledTextBox}"
                                      Tag="Position X"
-                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                     TextChanged="PositionXTextBox_TextChanged"/>
 
                             <TextBox Grid.Column="2"
                                      x:Name="PositionYTextBox" 
                                      Style="{StaticResource ImaginationLabeledTextBox}"
                                      Tag="Position Y"
-                                     PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                                     PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                     TextChanged="PositionYTextBox_TextChanged"/>
                         </Grid>
 
                         <TextBox x:Name="PositionZTextBox" 
                                  Style="{StaticResource ImaginationLabeledTextBox}"
                                  Tag="Position Z"
                                  Margin="0,5,0,5"
-                                 PreviewTextInput="FloatTextBox_PreviewTextInput" />
+                                 PreviewTextInput="FloatTextBox_PreviewTextInput"
+                                 TextChanged="PositionZTextBox_TextChanged"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
