@@ -14,7 +14,8 @@ namespace Ocelot.Models
 
         public HealArea()
         {
-
+            PtreType = "FP";
+            Position = new Position3D();
         }
 
         public HealArea(PtreeNode ptreeNode)
@@ -66,6 +67,7 @@ namespace Ocelot.Models
 
         public Healpoint()
         {
+            HealpointName = "HEALPOINT";
             HealAreas = new List<HealArea>();
         }
 
