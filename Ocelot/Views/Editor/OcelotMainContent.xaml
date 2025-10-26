@@ -247,15 +247,6 @@
                                           VerticalAlignment="Center" 
                                           Margin="0,0,10,0"
                                           Foreground="{DynamicResource Theme.Text.PrimaryBrush}" />
-
-                                <Button Content="Rotation" Style="{StaticResource ModernButtonStyle}" />
-                                <Button Content="Pan" Style="{StaticResource ModernButtonStyle}" />
-                                <Button Content="Reset" Style="{StaticResource ModernButtonStyle}" />
-                                <ComboBox Style="{StaticResource ModernComboBoxStyle}" Width="120" Margin="10,0,0,0">
-                                    <ComboBoxItem Content="Perspective" />
-                                    <ComboBoxItem Content="Orthogonal" />
-                                    <ComboBoxItem Content="Isometric" />
-                                </ComboBox>
                             </StackPanel>
                         </Border>
 
@@ -264,7 +255,7 @@
                                Margin="5" 
                                CornerRadius="3">
                             <Grid>
-                                <TextBlock Text="3D View Container" 
+                                <TextBlock Text="Not available to the moment" 
                                           HorizontalAlignment="Center" 
                                           VerticalAlignment="Center"
                                           Foreground="{DynamicResource Theme.Text.SecondaryBrush}"
