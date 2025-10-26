@@ -10,3 +10,5 @@ Ocelot/obj/
 bin/**/*.zip
 bin/**/*.rar
 **/packages/
+
+playground.json
