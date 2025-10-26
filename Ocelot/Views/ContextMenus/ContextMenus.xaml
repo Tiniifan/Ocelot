@@ -107,4 +107,12 @@
         </MenuItem>
     </ContextMenu>
 
+    <ContextMenu
+        x:Key="RootContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Healpoint"
+                  Command="{Binding AddHealPointCommand}"
+                  CommandParameter="{Binding}"/>
+    </ContextMenu>    
+    
 </ResourceDictionary>

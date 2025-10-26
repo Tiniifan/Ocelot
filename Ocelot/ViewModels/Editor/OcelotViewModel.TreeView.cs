@@ -16,7 +16,9 @@ namespace Ocelot.ViewModels
 {
     public partial class OcelotViewModel : BaseViewModel
     {
-        // Propriété pour lier la racine de l'arborescence à la vue
+        /// <summary>
+        /// Gets or sets the root collection of TreeView items bound to the view.
+        /// </summary>
         private ObservableCollection<TreeViewItemViewModel> _npcTreeItems;
         public ObservableCollection<TreeViewItemViewModel> NPCTreeItems
         {
@@ -24,7 +26,10 @@ namespace Ocelot.ViewModels
             set => SetProperty(ref _npcTreeItems, value);
         }
 
-        // Propriétés pour l'élément sélectionné dans l'arborescence
+        /// <summary>
+        /// Gets or sets the currently selected TreeView item.
+        /// Invokes selection handling when changed.
+        /// </summary>
         private TreeViewItemViewModel _selectedTreeViewItem;
         public TreeViewItemViewModel SelectedTreeViewItem
         {
@@ -36,7 +41,9 @@ namespace Ocelot.ViewModels
             }
         }
 
-        // Propriétés pour les données du panneau droit
+        /// <summary>
+        /// Gets or sets the currently selected Event for the right-hand panel.
+        /// </summary>
         private Event _selectedEvent;
         public Event SelectedEvent
         {
@@ -44,6 +51,9 @@ namespace Ocelot.ViewModels
             set => SetProperty(ref _selectedEvent, value);
         }
 
+        /// <summary>
+        /// Gets or sets the currently selected HealArea for the right-hand panel.
+        /// </summary>
         private HealArea _selectedHealArea;
         public HealArea SelectedHealArea
         {
@@ -51,6 +61,9 @@ namespace Ocelot.ViewModels
             set => SetProperty(ref _selectedHealArea, value);
         }
 
+        /// <summary>
+        /// Gets or sets the currently selected NPCBase for the right-hand panel.
+        /// </summary>
         private NPCBase _selectedNPC;
         public NPCBase SelectedNPC
         {
@@ -58,19 +71,36 @@ namespace Ocelot.ViewModels
             set => SetProperty(ref _selectedNPC, value);
         }
 
-        // Méthode pour peupler l'arborescence
+        /// <summary>
+        /// Populates the TreeView with all relevant items including map environment, function points,
+        /// heal points, NPCs (with their appears and talks), treasure boxes, and encounters.
+        /// Sets up context menus for each category and expands the root node while keeping its immediate children collapsed.
+        /// </summary>
         public void PopulateTreeView()
         {
             if (NPCTreeItems == null)
-            {
                 NPCTreeItems = new ObservableCollection<TreeViewItemViewModel>();
-            }
 
             NPCTreeItems.Clear();
 
+            if (_currentFolderName == null)
+            {
+                return;
+            }
+
+            var rootContextMenu = (ContextMenu)Application.Current.FindResource("RootContextMenu");
+            rootContextMenu.DataContext = this;
+
+            var rootItem = new TreeViewItemViewModel
+            {
+                Header = _currentFolderName,
+                Tag = "Root",
+                ContextMenu = rootContextMenu
+            };
+
             if (MapEnvironment != null)
             {
-                NPCTreeItems.Add(new TreeViewItemViewModel { Header = $"{MapEnvironment.MapID}_mapenv", Tag = "Mapenv" });
+                rootItem.Children.Add(new TreeViewItemViewModel { Header = $"{MapEnvironment.MapID}_mapenv", Tag = "Mapenv" });
             }
 
             if (FunctionPoint != null)
@@ -84,28 +114,22 @@ namespace Ocelot.ViewModels
                 var eventNode = new TreeViewItemViewModel { Header = "Event", Tag = new { Type = "EventCategory", Data = FunctionPoint } };
                 var eventEvents = FunctionPoint.Events?.Where(e => e.EventName.StartsWith("KO") || e.EventName.StartsWith("EV")).ToList() ?? new List<Event>();
                 foreach (var evt in eventEvents)
-                {
                     eventNode.Children.Add(new TreeViewItemViewModel { Header = evt.EventName, Tag = new { Type = "Event", Data = evt } });
-                }
                 funcptItem.Children.Add(eventNode);
 
                 var mapJumpNode = new TreeViewItemViewModel { Header = "Map Jump", Tag = new { Type = "MapJumpCategory", Data = FunctionPoint } };
                 var mapJumpEvents = FunctionPoint.Events?.Where(e => e.EventName.StartsWith("MJ")).ToList() ?? new List<Event>();
                 foreach (var evt in mapJumpEvents)
-                {
                     mapJumpNode.Children.Add(new TreeViewItemViewModel { Header = evt.EventName, Tag = new { Type = "MapJump", Data = evt } });
-                }
                 funcptItem.Children.Add(mapJumpNode);
 
                 var soundEffectNode = new TreeViewItemViewModel { Header = "Sound Effect", Tag = new { Type = "SoundEffectCategory", Data = FunctionPoint } };
                 var soundEffectEvents = FunctionPoint.Events?.Where(e => e.EventName.StartsWith("MS")).ToList() ?? new List<Event>();
                 foreach (var evt in soundEffectEvents)
-                {
                     soundEffectNode.Children.Add(new TreeViewItemViewModel { Header = evt.EventName, Tag = new { Type = "SoundEffect", Data = evt } });
-                }
                 funcptItem.Children.Add(soundEffectNode);
 
-                NPCTreeItems.Add(funcptItem);
+                rootItem.Children.Add(funcptItem);
             }
 
             if (HealPoint != null)
@@ -125,7 +149,7 @@ namespace Ocelot.ViewModels
                     });
                 }
 
-                NPCTreeItems.Add(healptItem);
+                rootItem.Children.Add(healptItem);
             }
 
             if (NPCs?.Count > 0)
@@ -208,7 +232,7 @@ namespace Ocelot.ViewModels
                     npcRootItem.Children.Add(npcItem);
                 }
 
-                NPCTreeItems.Add(npcRootItem);
+                rootItem.Children.Add(npcRootItem);
             }
 
             if (TreasureBoxes?.Count > 0)
@@ -218,7 +242,7 @@ namespace Ocelot.ViewModels
                 {
                     treasureItem.Children.Add(new TreeViewItemViewModel { Header = treasure.TBoxID.ToString("X8"), Tag = treasure });
                 }
-                NPCTreeItems.Add(treasureItem);
+                rootItem.Children.Add(treasureItem);
             }
 
             if (Encounters?.Count > 0)
@@ -228,21 +252,33 @@ namespace Ocelot.ViewModels
                 {
                     encounterItem.Children.Add(new TreeViewItemViewModel { Header = encounter.TeamID.ToString("X8"), Tag = encounter });
                 }
-                NPCTreeItems.Add(encounterItem);
+                rootItem.Children.Add(encounterItem);
             }
+
+            rootItem.IsExpanded = true;
+            foreach (var child in rootItem.Children)
+            {
+                child.IsExpanded = false;
+            }
+
+            NPCTreeItems.Add(rootItem);
         }
 
-        // Nouvelle méthode dans le ViewModel pour gérer la logique de sélection
+        /// <summary>
+        /// Handles changes in the selected TreeView item.
+        /// Updates the corresponding properties for Event, HealArea, or NPC,
+        /// and triggers any necessary updates to the right-hand panel and overlays.
+        /// </summary>
         private void HandleSelectedItemChanged(TreeViewItemViewModel selectedItem)
         {
             if (selectedItem == null) return;
 
-            // Réinitialiser les sélections précédentes
+            // Reset previous selections
             SelectedEvent = null;
             SelectedHealArea = null;
             SelectedNPC = null;
 
-            // Appeler une méthode pour mettre à jour le panneau de droite, si nécessaire
+            // Call a method to update the right panel, if necessary
             UpdateRightPanel(selectedItem);
 
             if (selectedItem.Tag != null && selectedItem.Tag.GetType().GetProperty("Type") != null)
@@ -261,19 +297,19 @@ namespace Ocelot.ViewModels
                 else if (type == "NPC")
                 {
                     SelectedNPC = data.Data;
-                    _selectedNPCAppearIndices.Remove(SelectedNPC.ID); // Utilisez SelectedNPC
+                    _selectedNPCAppearIndices.Remove(SelectedNPC.ID);
                 }
                 else if (type == "NPCAppear")
                 {
                     SelectedNPC = data.NPC;
-                    _selectedNPCAppearIndices[SelectedNPC.ID] = data.Index; // Utilisez SelectedNPC
+                    _selectedNPCAppearIndices[SelectedNPC.ID] = data.Index;
                 }
                 else if (type == "NPCTalk")
                 {
-                    if (SelectedNPC == null || SelectedNPC.ID != data.NPC.ID) // Utilisez SelectedNPC
+                    if (SelectedNPC == null || SelectedNPC.ID != data.NPC.ID)
                     {
                         SelectedNPC = data.NPC;
-                        _selectedNPCAppearIndices.Remove(SelectedNPC.ID); // Utilisez SelectedNPC
+                        _selectedNPCAppearIndices.Remove(SelectedNPC.ID);
                     }
                 }
             }

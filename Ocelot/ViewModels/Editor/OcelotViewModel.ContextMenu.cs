@@ -28,6 +28,8 @@ namespace Ocelot.ViewModels
         public ICommand DuplicateAppearCommand { get; private set; }
         public ICommand DeleteAppearCommand { get; private set; }
 
+        public ICommand AddHealPointCommand { get; private set; }
+
         public void InitializeContextMenuCommand()
         {
             AddNpcCommand = new RelayCommand(ExecuteAddNpc);
@@ -41,6 +43,8 @@ namespace Ocelot.ViewModels
             AddAppearCommand = new RelayCommand(ExecuteAddAppear);
             DuplicateAppearCommand = new RelayCommand(ExecuteDuplicateAppear);
             DeleteAppearCommand = new RelayCommand(ExecuteDeleteAppear);
+
+            AddHealPointCommand = new RelayCommand(ExecuteAddHealPoint);
         }
 
         private void ExecuteAddNpc(object parameter)
@@ -309,6 +313,37 @@ namespace Ocelot.ViewModels
                     PopulateTreeView();
                 }
             }
+        }
+
+        private void ExecuteAddHealPoint(object parameter)
+        {
+            string healAreaIdInput = DialogService.ShowInputBox("Enter Healpoint ID:", "Add Healpoint", "");
+
+            if (string.IsNullOrWhiteSpace(healAreaIdInput))
+                return;
+
+            if (HealPoint == null)
+                HealPoint = new Healpoint()
+                {
+                    MapID = _currentFolderName
+                };
+
+            if (HealPoint.HealAreas.Any(healArea => healArea.HealAreaName == healAreaIdInput))
+            {
+                MessageBox.Show($"Healpoint with ID {healAreaIdInput} already exists!", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var newHealArea = new HealArea
+            {
+                HealAreaName = healAreaIdInput
+            };
+
+            HealPoint.HealAreas.Add(newHealArea);
+
+            MessageBox.Show($"Healpoint {healAreaIdInput} added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            PopulateTreeView();
         }
     }
 }
