@@ -59,6 +59,7 @@
                             <Style TargetType="TreeViewItem"
                                     BasedOn="{StaticResource ImaginationTreeViewItem}">
                                 <Setter Property="ContextMenu" Value="{Binding ContextMenu}" />
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
                             </Style>
                         </TreeView.ItemContainerStyle>
 

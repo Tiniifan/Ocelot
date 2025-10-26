@@ -34,6 +34,13 @@ namespace Ocelot.ViewModels.TreeView
             set => SetProperty(ref _contextMenu, value);
         }
 
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set => SetProperty(ref _isExpanded, value);
+        }
+
         public TreeViewItemViewModel()
         {
             Children = new ObservableCollection<TreeViewItemViewModel>();
