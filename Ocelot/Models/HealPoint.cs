@@ -59,6 +59,11 @@ namespace Ocelot.Models
 
         public List<HealArea> HealAreas;
 
+        public Healpoint()
+        {
+            HealAreas = new List<HealArea>();
+        }
+
         public Healpoint(PtreeNode ptreeNode)
         {
             InitializeFromNode(ptreeNode);
