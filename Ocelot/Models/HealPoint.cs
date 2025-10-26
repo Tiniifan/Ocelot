@@ -1,4 +1,5 @@
 ﻿using StudioElevenLib.Level5.Binary.Collections;
+using StudioElevenLib.Level5.Binary.Logic;
 using System.Collections.Generic;
 
 namespace Ocelot.Models
@@ -33,6 +34,20 @@ namespace Ocelot.Models
                     Position = new Position3D(basePtreeNode, "POS");
                 }
             }
+        }
+
+        public PtreeNode ToPtreeNode()
+        {
+            var entry = new Entry("PTREE");
+            entry.Variables.Add(new Variable(CfgValueType.String, "FP"));
+            entry.Variables.Add(new Variable(CfgValueType.String, HealAreaName));
+
+            var node = new PtreeNode(entry);
+
+            if (Position != null)
+                node.AddChild(Position.ToPtreeNode("POS"));
+
+            return node;
         }
     }
 
@@ -71,6 +86,25 @@ namespace Ocelot.Models
                     }
                 }
             }
+        }
+
+        public PtreeNode ToPtreeNode()
+        {
+            var entry = new Entry("PTREE");
+            entry.Variables.Add(new Variable(CfgValueType.String, "HEALPOINT"));
+            entry.Variables.Add(new Variable(CfgValueType.String, MapID));
+
+            var node = new PtreeNode(entry);
+
+            if (HealAreas != null && HealAreas.Count > 0)
+            {
+                foreach (var healArea in HealAreas)
+                {
+                    node.AddChild(healArea.ToPtreeNode());
+                }
+            }
+
+            return node;
         }
     }
 }
