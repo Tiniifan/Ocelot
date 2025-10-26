@@ -12,6 +12,11 @@ namespace Ocelot.Models
 
         public Position3D Position { get; set; }
 
+        public HealArea()
+        {
+
+        }
+
         public HealArea(PtreeNode ptreeNode)
         {
             InitializeFromNode(ptreeNode);
