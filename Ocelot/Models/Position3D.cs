@@ -13,6 +13,11 @@ namespace Ocelot.Models
 
         public float? W { get; set; }
 
+        public Position3D()
+        {
+
+        }
+
         public Position3D(PtreeNode ptreeNode, string nodeName)
         {
             InitializeFromNode(ptreeNode, nodeName);
