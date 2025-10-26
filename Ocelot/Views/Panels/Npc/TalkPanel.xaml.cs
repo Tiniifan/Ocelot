@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,10 +51,37 @@ namespace Ocelot.Views.Panels
             }
 
             // Load condition
-            ConditionTextBox.Text = _talk.EventCondition ?? string.Empty;
+            if (_talk.EventCondition is string phaseAppearStr)
+            {
+                ConditionTextBox.Text = phaseAppearStr;
+            }
+            else
+            {
+                ConditionTextBox.Text = string.Empty;
+            }
 
             // Update event value control
             UpdateEventValueControl();
+
+            AttachEventHandlers();
+        }
+
+        private void AttachEventHandlers()
+        {
+            ConditionTextBox.TextChanged += (s, e) =>
+            {
+                if (_talk != null)
+                {
+                    if (string.IsNullOrEmpty(ConditionTextBox.Text))
+                    {
+                        _talk.EventCondition = 0;
+                    }
+                    else
+                    {
+                        _talk.EventCondition = ConditionTextBox.Text;
+                    }
+                }
+            };
         }
 
         private void AutoTurnCheckBox_CheckChanged(object sender, RoutedEventArgs e)
@@ -130,10 +159,78 @@ namespace Ocelot.Views.Panels
             EventValueContainer.Children.Add(eventValuePanel);
         }
 
-        private void MakeConditionButton_Click(object sender, RoutedEventArgs e)
+        private void OpenConditionEditor_Click(object sender, RoutedEventArgs e)
         {
-            // This would typically open a condition editor dialog
-            MessageBox.Show("Condition editor would open here", "Make My Condition", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (_talk == null) return;
+
+            // Check if the ./Tools/inz_cond folder exists
+            string toolsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools", "inz_cond");
+            string exePath = Path.Combine(toolsPath, "inz_cond_gui.exe");
+
+            if (!Directory.Exists(toolsPath) || !File.Exists(exePath))
+            {
+                MessageBox.Show(
+                    "inz_cond_gui.exe must be in the inz_cond folder within the Tools folder.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+                return;
+            }
+
+            // Prepare the arguments
+            string arguments = "-o";
+
+            // If EventCondition is a non-empty string, add it as an argument
+            if (_talk.EventCondition is string phaseAppearStr && !string.IsNullOrEmpty(phaseAppearStr))
+            {
+                arguments += $" {phaseAppearStr}";
+            }
+
+            // Create the process
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                WorkingDirectory = toolsPath
+            };
+
+            try
+            {
+                using (Process process = Process.Start(startInfo))
+                {
+                    // Wait for the process to finish
+                    process.WaitForExit();
+
+                    // Read the output
+                    string output = process.StandardOutput.ReadToEnd().Trim();
+
+                    // Process the result
+                    if (output == "-1")
+                    {
+                        // Return -1: set PhaseAppear to 0
+                        ConditionTextBox.Text = string.Empty;
+                    }
+                    else if (!string.IsNullOrEmpty(output))
+                    {
+                        // Base64 return: set PhaseAppear to base64
+                        ConditionTextBox.Text = output;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error when launching inz_cond_gui.exe:\n{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
         }
 
         #region Input Validation
