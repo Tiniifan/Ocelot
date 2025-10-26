@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using StudioElevenGUI.ViewModels;
 
 namespace Ocelot.ViewModels.TreeView
@@ -24,6 +25,13 @@ namespace Ocelot.ViewModels.TreeView
         {
             get => _children;
             set => SetProperty(ref _children, value);
+        }
+
+        private ContextMenu _contextMenu;
+        public ContextMenu ContextMenu
+        {
+            get => _contextMenu;
+            set => SetProperty(ref _contextMenu, value);
         }
 
         public TreeViewItemViewModel()

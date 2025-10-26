@@ -10,6 +10,7 @@ using StudioElevenGUI.ViewModels;
 using StudioElevenLib.Collections;
 using Ocelot.ViewModels.TreeView;
 using System.Collections.ObjectModel;
+using Ocelot.Models.Tags;
 
 namespace Ocelot.ViewModels
 {
@@ -129,26 +130,44 @@ namespace Ocelot.ViewModels
 
             if (NPCs?.Count > 0)
             {
+                var contextMenu = (ContextMenu)Application.Current.FindResource("NpcContextMenu");
+                contextMenu.DataContext = this;
+
+                var npcItemContextMenu = (ContextMenu)Application.Current.FindResource("NpcItemContextMenu");
+                npcItemContextMenu.DataContext = this;
+
+                var talksNodeContextMenu = (ContextMenu)Application.Current.FindResource("TalksNodeContextMenu");
+                talksNodeContextMenu.DataContext = this;
+
+                var talkItemContextMenu = (ContextMenu)Application.Current.FindResource("TalkItemContextMenu");
+                talkItemContextMenu.DataContext = this;
+
+                var appearsNodeContextMenu = (ContextMenu)Application.Current.FindResource("AppearsNodeContextMenu");
+                appearsNodeContextMenu.DataContext = this;
+
+                var appearItemContextMenu = (ContextMenu)Application.Current.FindResource("AppearItemContextMenu");
+                appearItemContextMenu.DataContext = this;
+
                 var npcRootItem = new TreeViewItemViewModel
                 {
                     Header = $"{_currentFolderName}_npc",
-                    Tag = this // Peut être utile pour le DataContext de commandes liées
+                    ContextMenu = contextMenu
                 };
-
-                // Le ContextMenu sera géré dans la vue via des styles ou des DataTemplates
 
                 foreach (var npc in NPCs)
                 {
                     var npcItem = new TreeViewItemViewModel
                     {
                         Header = GetNPCName(npc),
-                        Tag = new { Type = "NPC", Data = npc }
+                        Tag = new NPCTagData { Type = "NPC", Data = npc },
+                        ContextMenu = npcItemContextMenu,
                     };
 
                     var appearsNode = new TreeViewItemViewModel
                     {
                         Header = "Appears",
-                        Tag = new { Type = "AppearsCategory", NPC = npc }
+                        Tag = new AppearsCategoryTagData { Type = "AppearsCategory", NPC = npc },
+                        ContextMenu = appearsNodeContextMenu,
                     };
 
                     if (NPCAppearDict != null && NPCAppearDict.TryGetValue(npc.ID, out var appears))
@@ -158,7 +177,8 @@ namespace Ocelot.ViewModels
                             appearsNode.Children.Add(new TreeViewItemViewModel
                             {
                                 Header = $"Appear_{i}",
-                                Tag = new { Type = "NPCAppear", NPC = npc, Appear = appears[i], Index = i }
+                                Tag = new NPCAppearTagData { Type = "NPCAppear", NPC = npc, Appear = appears[i], Index = i },
+                                ContextMenu = appearItemContextMenu,
                             });
                         }
                     }
@@ -167,7 +187,8 @@ namespace Ocelot.ViewModels
                     var talksNode = new TreeViewItemViewModel
                     {
                         Header = "Talks",
-                        Tag = new { Type = "TalksCategory", NPC = npc }
+                        Tag = new TalksCategoryTagData { Type = "TalksCategory", NPC = npc },
+                        ContextMenu = talksNodeContextMenu,
                     };
 
                     if (NPCTalkDict != null && NPCTalkDict.TryGetValue(npc.ID, out var talks))
@@ -177,7 +198,8 @@ namespace Ocelot.ViewModels
                             talksNode.Children.Add(new TreeViewItemViewModel
                             {
                                 Header = $"Talk_{i}",
-                                Tag = new { Type = "NPCTalk", NPC = npc, Talk = talks[i], Index = i }
+                                Tag = new NPCTalkTagData { Type = "NPCTalk", NPC = npc, Talk = talks[i], Index = i },
+                                ContextMenu = talkItemContextMenu,
                             });
                         }
                     }
