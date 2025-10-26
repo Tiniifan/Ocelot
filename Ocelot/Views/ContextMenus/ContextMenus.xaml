@@ -1,13 +1,110 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
     <ContextMenu
         x:Key="NpcContextMenu"
         Style="{StaticResource Theme.AcrylicContextMenuStyle}">
         <MenuItem Header="Add NPC"
-                  Command="{Binding PlacementTarget.Tag.AddNpcCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  Command="{Binding AddNpcCommand}"
+                  CommandParameter="{Binding}"/>
+    </ContextMenu>
+
+    <ContextMenu
+        x:Key="NpcItemContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add NPC"
+                  Command="{Binding AddNpcCommand}"
+                  CommandParameter="{Binding}"/>        
+        <Separator/>
+        <MenuItem Command="{Binding DataContext.DuplicateNpcCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Duplicate "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+        <MenuItem Command="{Binding DataContext.DeleteNpcCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Delete "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+    </ContextMenu>
+
+    <ContextMenu
+        x:Key="TalksNodeContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Talk"
+                  Command="{Binding DataContext.AddTalkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
     </ContextMenu>
-    
+
+    <ContextMenu
+        x:Key="TalkItemContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Talk"
+                  Command="{Binding DataContext.AddTalkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+        <Separator/>
+        <MenuItem Command="{Binding DataContext.DuplicateTalkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Duplicate "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+        <MenuItem Command="{Binding DataContext.DeleteTalkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Delete "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+    </ContextMenu>
+
+    <ContextMenu
+        x:Key="AppearsNodeContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Appear"
+                  Command="{Binding DataContext.AddAppearCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+    </ContextMenu>
+
+    <ContextMenu
+        x:Key="AppearItemContextMenu"
+        Style="{StaticResource Theme.AcrylicContextMenuStyle}">
+        <MenuItem Header="Add Appear"
+                  Command="{Binding DataContext.AddAppearCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+        <Separator/>
+        <MenuItem Command="{Binding DataContext.DuplicateAppearCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Duplicate "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+        <MenuItem Command="{Binding DataContext.DeleteAppearCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Header>
+                <TextBlock>
+                    <Run Text="Delete "/>
+                    <Run Text="{Binding PlacementTarget.DataContext.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=OneWay}"/>
+                </TextBlock>
+            </MenuItem.Header>
+        </MenuItem>
+    </ContextMenu>
+
 </ResourceDictionary>

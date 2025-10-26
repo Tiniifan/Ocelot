@@ -77,8 +77,7 @@ namespace Ocelot
         {
             try
             {
-                var services = new DialogService();
-                string selectedFolderPath = services.ShowSelectFolderDialog("Open Inazuma Eleven Go Map Folder");
+                string selectedFolderPath = DialogService.ShowSelectFolderDialog("Open Inazuma Eleven Go Map Folder");
 
                 if (!string.IsNullOrEmpty(selectedFolderPath))
                 {

@@ -10,7 +10,6 @@ namespace Ocelot.Views.Panels
     public partial class EncounterPanel : UserControl
     {
         private Border _activeTab;
-        private bool _isInternalChange = false;
 
         public EncounterPanel()
         {

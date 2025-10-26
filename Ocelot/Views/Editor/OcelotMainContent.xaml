@@ -54,6 +54,14 @@
                               Style="{StaticResource ModernTreeViewStyle}"
                               ItemsSource="{Binding NPCTreeItems}"
                               SelectedItemChanged="TreeView_SelectedItemChanged">
+
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem"
+                                    BasedOn="{StaticResource ImaginationTreeViewItem}">
+                                <Setter Property="ContextMenu" Value="{Binding ContextMenu}" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                 <TextBlock Text="{Binding Header}" />

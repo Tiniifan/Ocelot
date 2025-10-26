@@ -69,7 +69,9 @@
     <Compile Include="Models\Overlay\OverlayShapeData.cs" />
     <Compile Include="Models\Overlay\OverlayShapeType.cs" />
     <Compile Include="Models\Overlay\OverlayUpdateEventArgs.cs" />
+    <Compile Include="Models\Tags\NPCTag.cs" />
     <Compile Include="ViewModels\Editor\OcelotViewModel.BoundingBox.cs" />
+    <Compile Include="ViewModels\Editor\OcelotViewModel.ContextMenu.cs" />
     <Compile Include="ViewModels\Editor\OcelotViewModel.cs" />
     <Compile Include="ViewModels\Editor\OcelotViewModel.IdMaper.cs" />
     <Compile Include="ViewModels\Editor\OcelotViewModel.Loader.cs" />

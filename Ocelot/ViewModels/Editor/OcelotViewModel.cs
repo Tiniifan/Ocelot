@@ -13,10 +13,6 @@ namespace Ocelot.ViewModels
 {
     public partial class OcelotViewModel : BaseViewModel
     {
-        private Border _activeTab;
-        private bool _isDragging = false;
-        private System.Windows.Point _lastMousePosition;
-
         // Data containers
         public Mapenv MapEnvironment { get; set; }
         public Funcpoint FunctionPoint { get; set; }
@@ -48,17 +44,12 @@ namespace Ocelot.ViewModels
         private NPCJsonData _npcJsonData;
         private Dictionary<string, int> _npcNameCounts = new Dictionary<string, int>();
 
-        #region Commands
-        public ICommand AddNpcCommand { get; }
-
-        #endregion
-
         public OcelotViewModel()
         {
             // Initialize commands
             InitializeMinimapCommand();
             InitializeTabCommand();
-            //AddNpcCommand = new RelayCommand(ExecuteAddNpc);
+            InitializeContextMenuCommand();
 
             InitializePanels();
             PopulateTreeView();

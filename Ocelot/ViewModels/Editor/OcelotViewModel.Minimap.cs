@@ -144,8 +144,6 @@ namespace Ocelot.ViewModels
         // Événement pour demander à la vue de dessiner les overlays
         public event EventHandler<OverlayUpdateEventArgs> RequestOverlayUpdate;
         public event EventHandler<double> RequestSetZoom; // Pour la vue afin d'appliquer le zoom
-        public event EventHandler<string> RequestUpdateOverlayText;
-        public event EventHandler<string> RequestUpdateNpcModeText;
 
         public void InitializeMinimapCommand()
         {
