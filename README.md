@@ -11,7 +11,7 @@ The tool allows you to read and modify various map components:
 With Ocelot, you can easily visualize and edit these values through an intuitive interface.
 
 Ocelot is built using **WPF** and it uses two main libraries:
-- **ImaginationUI.dll**: Handles all UI generation and components
+- **ImaginationUI.dll (also known as StudioElevenGUI)**: Handles all UI generation and components
 - **StudioElevenLib.dll**: Facilitates reading and understanding Level-5 file formats
 
 <img width="1920" height="1032" alt="Ocelot Interface" src="https://github.com/user-attachments/assets/8d1a3b69-e3e3-4f79-957f-a7ade7dc6d5c" />
