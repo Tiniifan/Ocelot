@@ -14,6 +14,7 @@ using System.Text;
 using StudioElevenLib.Level5.Binary.Logic;
 using StudioElevenLib.Collections;
 using StudioElevenLib.Level5.Binary.Mapper;
+using System.Runtime.InteropServices;
 
 namespace Ocelot
 {

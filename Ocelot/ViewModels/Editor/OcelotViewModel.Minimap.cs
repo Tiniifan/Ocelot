@@ -143,7 +143,7 @@ namespace Ocelot.ViewModels
 
         // Événement pour demander à la vue de dessiner les overlays
         public event EventHandler<OverlayUpdateEventArgs> RequestOverlayUpdate;
-        public event EventHandler<double> RequestSetZoom; // Pour la vue afin d'appliquer le zoom
+        public event EventHandler<double> RequestSetZoom;
 
         public void InitializeMinimapCommand()
         {
@@ -169,13 +169,13 @@ namespace Ocelot.ViewModels
                     bitmapImage.EndInit();
                     bitmapImage.Freeze();
 
-                    MinimapSource = bitmapImage; // Met à jour la source d'image pour la vue
+                    MinimapSource = bitmapImage;
 
-                    OverlayCanvasWidth = bitmapImage.PixelWidth;
-                    OverlayCanvasHeight = bitmapImage.PixelHeight;
+                    OverlayCanvasWidth = bitmapImage.Width;
+                    OverlayCanvasHeight = bitmapImage.Height;
 
-                    CurrentZoom = 2.5; // Initialiser le zoom
-                    UpdateOverlays(); // Dessiner les overlays après le chargement
+                    CurrentZoom = 2.5;
+                    UpdateOverlays();
                 }
             }
             catch (System.Exception ex)
@@ -186,10 +186,10 @@ namespace Ocelot.ViewModels
 
         private void SetZoom(double zoom)
         {
-            _currentZoom = zoom; // Met à jour la variable privée
-            OnPropertyChanged(nameof(CurrentZoom)); // Notifie la vue du changement
-            RequestSetZoom?.Invoke(this, _currentZoom); // Demande à la vue d'appliquer le zoom
-            UpdateOverlays(); // Redessine les overlays si nécessaire (peut ne pas être nécessaire si le zoom est appliqué via RenderTransform)
+            _currentZoom = zoom;
+            OnPropertyChanged(nameof(CurrentZoom));
+            RequestSetZoom?.Invoke(this, _currentZoom);
+            UpdateOverlays();
         }
 
         private void ZoomIn()
@@ -422,7 +422,6 @@ namespace Ocelot.ViewModels
             double scaleX = (double)mapWidth / rangeX;
             double scaleY = (double)mapHeight / rangeY;
 
-            // Utiliser System.Windows.Point pour éviter les problèmes de casting ultérieurs
             double mapX = (pointX - minX) * scaleX;
             double mapY = (pointY - minY) * scaleY;
 

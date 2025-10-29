@@ -36,11 +36,6 @@ namespace Ocelot.Views
             SetActiveTab(MinimapTab);
 
             Loaded += OnLoaded;
-
-            if (ImageScrollViewer != null)
-            {
-                ViewModel_RequestSetZoom(this, ViewModel.CurrentZoom);
-            }
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -172,29 +167,6 @@ namespace Ocelot.Views
                 {
                     EventOverlayCanvas.Children.Add(shape);
                 }
-            }
-        }
-
-        private void ViewModel_RequestSetZoom(object sender, double zoom)
-        {
-            if (MinimapImage.RenderTransform is ScaleTransform imageScaleTransform)
-            {
-                imageScaleTransform.ScaleX = zoom;
-                imageScaleTransform.ScaleY = zoom;
-            }
-            else
-            {
-                MinimapImage.RenderTransform = new ScaleTransform(zoom, zoom);
-            }
-
-            if (EventOverlayCanvas.RenderTransform is ScaleTransform canvasScaleTransform)
-            {
-                canvasScaleTransform.ScaleX = zoom;
-                canvasScaleTransform.ScaleY = zoom;
-            }
-            else
-            {
-                EventOverlayCanvas.RenderTransform = new ScaleTransform(zoom, zoom);
             }
         }
 
