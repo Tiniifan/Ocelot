@@ -146,13 +146,16 @@ namespace Ocelot.Views.Panels
             }
             else
             {
-                _eventValueTextBox.Text = _talk.EventValue.ToString();
-                _eventValueTextBox.PreviewTextInput += NumericTextBox_PreviewTextInput;
-                _eventValueTextBox.TextChanged += (s, e) =>
+                if (_talk.EventValue != null)
                 {
-                    if (int.TryParse(_eventValueTextBox.Text, out int result))
-                        _talk.EventValue = result;
-                };
+                    _eventValueTextBox.Text = _talk.EventValue.ToString();
+                    _eventValueTextBox.PreviewTextInput += NumericTextBox_PreviewTextInput;
+                    _eventValueTextBox.TextChanged += (s, e) =>
+                    {
+                        if (int.TryParse(_eventValueTextBox.Text, out int result))
+                            _talk.EventValue = result;
+                    };
+                }
             }
 
             eventValuePanel.Children.Add(_eventValueTextBox);
