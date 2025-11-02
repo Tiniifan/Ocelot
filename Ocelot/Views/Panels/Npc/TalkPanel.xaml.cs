@@ -14,6 +14,7 @@ namespace Ocelot.Views.Panels
     {
         private NPCTalkConfig _talk;
         private TextBox _eventValueTextBox;
+        bool _isUserInteraction;
 
         public TalkPanel()
         {
@@ -36,6 +37,9 @@ namespace Ocelot.Views.Panels
             _talk = talk;
 
             if (_talk == null) return;
+
+            // Disable event handlers during data loading
+            _isUserInteraction = false;
 
             // Load basic information
             AutoTurnCheckBox.IsChecked = _talk.AutoTurn == 2;
@@ -94,11 +98,40 @@ namespace Ocelot.Views.Panels
 
         private void EventTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!_isUserInteraction) return;
+
             if (_talk != null && EventTypeComboBox.SelectedItem is ComboBoxItem selectedItem && selectedItem.Tag is EventType eventType)
             {
                 _talk.EventType = (int)eventType;
+
+                switch (eventType)
+                {
+                    case EventType.None:
+                        _talk.EventValue = 0;
+                        break;
+
+                    case EventType.CompetitiveRoute:
+                        _talk.EventValue = "";
+                        break;
+
+                    case EventType.Text:
+                        _talk.EventValue = 0;
+                        break;
+
+                    default:
+                        _talk.EventValue = 0;
+                        break;
+                }
+
                 UpdateEventValueControl();
             }
+
+            _isUserInteraction = false;
+        }
+
+        private void EventTypeComboBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _isUserInteraction = true;
         }
 
         private void UpdateEventValueControl()
@@ -107,8 +140,14 @@ namespace Ocelot.Views.Panels
 
             if (_talk == null) return;
 
-            var eventValuePanel = new StackPanel { Margin = new Thickness(0, 5, 0, 5) };
+            var eventType = (EventType)_talk.EventType;
 
+            if (eventType == EventType.None)
+            {
+                return;
+            }
+
+            var eventValuePanel = new StackPanel { Margin = new Thickness(0, 5, 0, 5) };
             var eventTypeLabel = new TextBlock
             {
                 Text = "Event Value",
@@ -123,12 +162,9 @@ namespace Ocelot.Views.Panels
                 Margin = new Thickness(0, 0, 0, 5)
             };
 
-            var eventType = (EventType)_talk.EventType;
-
             if (eventType == EventType.CompetitiveRoute)
             {
                 _eventValueTextBox.Text = _talk.EventValue.ToString();
-
                 _eventValueTextBox.TextChanged += (s, e) =>
                 {
                     _talk.EventValue = _eventValueTextBox.Text;
@@ -136,26 +172,62 @@ namespace Ocelot.Views.Panels
             }
             else if (eventType == EventType.Text)
             {
-                _eventValueTextBox.Text = Convert.ToInt32(_talk.EventValue).ToString("X");
+                // Display with 0x prefix and 8-character padding (32 bits in little endian)
+                _eventValueTextBox.Text = "0x" + Convert.ToInt32(_talk.EventValue).ToString("X8");
+
                 _eventValueTextBox.PreviewTextInput += HexTextBox_PreviewTextInput;
+
                 _eventValueTextBox.TextChanged += (s, e) =>
                 {
-                    if (int.TryParse(_eventValueTextBox.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int result))
+                    string text = _eventValueTextBox.Text;
+
+                    // Limit to 10 characters max (0x + 8 hex digits)
+                    if (text.Length > 10)
+                    {
+                        _eventValueTextBox.Text = text.Substring(0, 10);
+                        _eventValueTextBox.CaretIndex = 10;
+                        return;
+                    }
+
+                    // Remove 0x prefix if present for parsing
+                    if (text.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                    {
+                        text = text.Substring(2);
+                    }
+
+                    if (int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int result))
+                    {
                         _talk.EventValue = result;
+                    }
+                };
+
+                // Handle focus loss to reformat with prefix and padding
+                _eventValueTextBox.LostFocus += (s, e) =>
+                {
+                    string text = _eventValueTextBox.Text;
+
+                    // Remove 0x prefix if present
+                    if (text.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                    {
+                        text = text.Substring(2);
+                    }
+
+                    if (int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int result))
+                    {
+                        // Reformat with 0x and 8-character padding
+                        _eventValueTextBox.Text = "0x" + result.ToString("X8");
+                    }
                 };
             }
             else
             {
-                if (_talk.EventValue != null)
+                _eventValueTextBox.Text = _talk.EventValue.ToString();
+                _eventValueTextBox.PreviewTextInput += NumericTextBox_PreviewTextInput;
+                _eventValueTextBox.TextChanged += (s, e) =>
                 {
-                    _eventValueTextBox.Text = _talk.EventValue.ToString();
-                    _eventValueTextBox.PreviewTextInput += NumericTextBox_PreviewTextInput;
-                    _eventValueTextBox.TextChanged += (s, e) =>
-                    {
-                        if (int.TryParse(_eventValueTextBox.Text, out int result))
-                            _talk.EventValue = result;
-                    };
-                }
+                    if (int.TryParse(_eventValueTextBox.Text, out int result))
+                        _talk.EventValue = result;
+                };
             }
 
             eventValuePanel.Children.Add(_eventValueTextBox);
@@ -245,7 +317,7 @@ namespace Ocelot.Views.Panels
 
         private void HexTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !Regex.IsMatch(e.Text, @"^[0-9A-Fa-f]+$");
+            e.Handled = !Regex.IsMatch(e.Text, @"^[0-9A-Fa-fxX]+$");
         }
 
         #endregion
