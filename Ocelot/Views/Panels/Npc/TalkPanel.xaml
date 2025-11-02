@@ -40,7 +40,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBox x:Name="ConditionTextBox" 
-                             IsReadOnly="True"
+                             IsReadOnly="False"
                              Style="{StaticResource ImaginationLabeledTextBox}"
                              Tag="Event Condition"
                              Margin="0,5,0,5"

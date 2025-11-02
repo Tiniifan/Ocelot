@@ -75,7 +75,7 @@
                              Style="{StaticResource ImaginationLabeledTextBox}"
                              Tag="Phase Appear"
                              Margin="0,5,0,5"
-                             IsReadOnly="True" 
+                             IsReadOnly="False" 
                              Grid.Row="0"/>
                     <Button x:Name="OpenConditionEditor" 
                             Content="Open Condition Editor" 
