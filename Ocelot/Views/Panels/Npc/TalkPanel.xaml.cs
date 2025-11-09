@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -284,16 +285,23 @@ namespace Ocelot.Views.Panels
                     // Read the output
                     string output = process.StandardOutput.ReadToEnd().Trim();
 
+                    // Clean up output: ignore warnings
+                    string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    string base64Line = lines.LastOrDefault(line => !line.StartsWith("Warning:", StringComparison.OrdinalIgnoreCase));
+
+                    if (base64Line == null)
+                        base64Line = string.Empty;
+
                     // Process the result
-                    if (output == "-1")
+                    if (base64Line == "-1")
                     {
                         // Return -1: set PhaseAppear to 0
                         ConditionTextBox.Text = string.Empty;
                     }
-                    else if (!string.IsNullOrEmpty(output))
+                    else if (!string.IsNullOrEmpty(base64Line))
                     {
                         // Base64 return: set PhaseAppear to base64
-                        ConditionTextBox.Text = output;
+                        ConditionTextBox.Text = base64Line;
                     }
                 }
             }

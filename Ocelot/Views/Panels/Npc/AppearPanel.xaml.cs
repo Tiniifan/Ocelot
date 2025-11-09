@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Ocelot.Models;
+using System.Linq;
 
 namespace Ocelot.Views.Panels
 {
@@ -178,16 +179,23 @@ namespace Ocelot.Views.Panels
                     // Read the output
                     string output = process.StandardOutput.ReadToEnd().Trim();
 
+                    // Clean up output: ignore warnings
+                    string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    string base64Line = lines.LastOrDefault(line => !line.StartsWith("Warning:", StringComparison.OrdinalIgnoreCase));
+
+                    if (base64Line == null)
+                        base64Line = string.Empty;
+
                     // Process the result
-                    if (output == "-1")
+                    if (base64Line == "-1")
                     {
                         // Return -1: set PhaseAppear to 0
                         PhaseAppearTextBox.Text = string.Empty;
                     }
-                    else if (!string.IsNullOrEmpty(output))
+                    else if (!string.IsNullOrEmpty(base64Line))
                     {
                         // Base64 return: set PhaseAppear to base64
-                        PhaseAppearTextBox.Text = output;
+                        PhaseAppearTextBox.Text = base64Line;
                     }
                 }
             }
@@ -201,5 +209,6 @@ namespace Ocelot.Views.Panels
                 );
             }
         }
+
     }
 }
